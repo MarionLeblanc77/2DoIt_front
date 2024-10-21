@@ -1,0 +1,11 @@
+// FICHIER RAJOUTE VS MODELE VITE DE BASE
+
+{
+    "recommendations": [
+      "dbaeumer.vscode-eslint",
+      "esbenp.prettier-vscode",
+      "usernamehw.errorlens",
+      "formulahendry.auto-rename-tag",
+      "pkief.material-icon-theme"
+    ]
+  }
