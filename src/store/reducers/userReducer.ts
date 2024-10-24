@@ -1,5 +1,6 @@
-import { createReducer, createAction } from "@reduxjs/toolkit";
+import { createAction, createReducer } from "@reduxjs/toolkit";
 import { IUser } from "../../@types/user";
+import googleLogin from "../middlewares/googleLogin";
 
 interface IUserState {
   logged: boolean;
@@ -16,12 +17,30 @@ export const userInitialState: IUserState = {
     last_name: "",
   },
 };
-const myFirstActionCreator = createAction("FIRST_ACTION");
+
+export const actionChangeUserStateInfo = createAction<{
+  newValue: string;
+  fieldName: "last_name" | "first_name" | "email" | "password";
+}>("user/CHANGE_USERINFO");
 
 const userReducer = createReducer(userInitialState, (builder) => {
-  builder.addCase(myFirstActionCreator, () => {
-    // action
-  });
+  builder
+    .addCase(actionChangeUserStateInfo, (state, action) => {
+      state.connectedUser[action.payload.fieldName] = action.payload.newValue;
+    })
+    .addCase(googleLogin.fulfilled, (state, action) => {
+      console.log("googleLogin fulfilled");
+      state.connectedUser.id = action.payload.id;
+      state.connectedUser.first_name = action.payload.first_name;
+      state.connectedUser.last_name = action.payload.last_name;
+      state.logged = true;
+    })
+    .addCase(googleLogin.pending, () => {
+      console.log("googleLogin pending");
+    })
+    .addCase(googleLogin.rejected, () => {
+      console.log("googleLogin rejected");
+    });
 });
 
 export default userReducer;

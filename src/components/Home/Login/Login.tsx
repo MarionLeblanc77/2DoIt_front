@@ -1,33 +1,34 @@
 import { CredentialResponse, GoogleLogin } from "@react-oauth/google";
 import "./Login.scss";
 import { jwtDecode } from "jwt-decode";
-import { useState } from "react";
 import { JwtPayload } from "../../../@types/jwtPayloard";
+import { useAppDispatch } from "../../../store/hooks-redux";
+import googleLogin from "../../../store/middlewares/googleLogin";
 
 function Login() {
-  const [userData, setUserData] = useState(null);
+  const dispatch = useAppDispatch();
+
+  const handleGoogleLogin = (newValue: string) => {
+    dispatch(googleLogin(newValue));
+  };
+
   return (
     <div className="login">
-      {!userData && (
-        <GoogleLogin
-          onSuccess={(credentialResponse: CredentialResponse) => {
-            if (typeof credentialResponse.credential === "string") {
-              const credentialResponseDecoded: JwtPayload = jwtDecode(
-                credentialResponse.credential
-              );
-              const retrievedUserData = {
-                first_name: credentialResponseDecoded.given_name,
-                last_name: credentialResponseDecoded.family_name,
-                email: credentialResponseDecoded.email,
-              };
-              setUserData(retrievedUserData);
+      <GoogleLogin
+        onSuccess={(credentialResponse: CredentialResponse) => {
+          if (typeof credentialResponse.credential === "string") {
+            const credentialResponseDecoded: JwtPayload = jwtDecode(
+              credentialResponse.credential
+            );
+            if (credentialResponseDecoded.email) {
+              handleGoogleLogin(credentialResponseDecoded.email);
             }
-          }}
-          onError={() => {
-            console.log("Login Failed");
-          }}
-        />
-      )}
+          }
+        }}
+        onError={() => {
+          console.log("Login Failed");
+        }}
+      />
     </div>
   );
 }
