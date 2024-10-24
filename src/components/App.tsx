@@ -1,14 +1,14 @@
 import { Route, Routes } from "react-router-dom";
 import "./App.scss";
 import Nav from "./Nav/Nav";
-import List from "./List/List";
+import Home from "./Home/Home";
 
 function App() {
   return (
     <div className="App">
       <Nav />
       <Routes>
-        <Route path="/" element={<List />} />
+        <Route path="/" element={<Home />} />
       </Routes>
     </div>
   );
