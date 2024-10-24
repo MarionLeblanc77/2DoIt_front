@@ -1,4 +1,5 @@
-import { createReducer, createAction } from "@reduxjs/toolkit";
+import { createReducer } from "@reduxjs/toolkit";
+import getTasks from "../middlewares/getTasks";
 
 interface ITaskState {
   content: string;
@@ -7,11 +8,10 @@ interface ITaskState {
 export const taskInitialState: ITaskState = {
   content: "",
 };
-const myFirstActionCreator = createAction("FIRST_ACTION");
 
 const taskReducer = createReducer(taskInitialState, (builder) => {
-  builder.addCase(myFirstActionCreator, () => {
-    // action
+  builder.addCase(getTasks.fulfilled, (state, action) => {
+    console.log(action.payload);
   });
 });
 
