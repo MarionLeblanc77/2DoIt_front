@@ -3,8 +3,8 @@ import Section from "./Section/Section";
 
 function List() {
   return (
-    <div className="List">
-      <Section />
+    <div className="list">
+      <Section />{" "}
     </div>
   );
 }
