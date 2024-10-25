@@ -1,5 +1,4 @@
 import "./Login.scss";
-
 import { FormEvent } from "react";
 import { useAppDispatch, useAppSelector } from "../../../store/hooks-redux";
 import Field from "../../Field/Field";
@@ -29,8 +28,7 @@ function Login({ changeField }: LoginProps) {
     dispatch(login());
   };
 
-  const handleSubmitRegister = (event: FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
+  const handleClickRegister = () => {
     dispatch(register());
   };
 
@@ -62,11 +60,11 @@ function Login({ changeField }: LoginProps) {
           search={false}
           edit={false}
         />
-        <button type="submit">Login </button>
+        <button type="submit">Login</button>
       </form>
-      <form className="register" onSubmit={handleSubmitRegister}>
-        <button type="submit">Register </button>
-      </form>
+      <button className="register" type="submit" onClick={handleClickRegister}>
+        Register
+      </button>
     </div>
   );
 }
