@@ -23,6 +23,8 @@ export const actionChangeUserStateInfo = createAction<{
   fieldName: "lastName" | "firstName" | "email" | "password";
 }>("user/CHANGE_USERINFO");
 
+export const actionLogout = createAction("user/LOGOUT");
+
 const userReducer = createReducer(userInitialState, (builder) => {
   builder
     .addCase(actionChangeUserStateInfo, (state, action) => {
@@ -50,6 +52,14 @@ const userReducer = createReducer(userInitialState, (builder) => {
     })
     .addCase(register.rejected, () => {
       console.log("Action register rejected");
+    })
+    .addCase(actionLogout, (state) => {
+      state.logged = false;
+      state.connectedUser.id = 0;
+      state.connectedUser.email = "";
+      state.connectedUser.password = "";
+      state.connectedUser.firstName = "";
+      state.connectedUser.lastName = "";
     });
 });
 
