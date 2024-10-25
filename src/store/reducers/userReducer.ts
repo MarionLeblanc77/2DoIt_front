@@ -1,6 +1,7 @@
 import { createReducer, createAction } from "@reduxjs/toolkit";
 import { IUser } from "../../@types/user";
 import login from "../middlewares/login";
+import register from "../middlewares/register";
 
 interface IUserState {
   logged: boolean;
@@ -13,13 +14,13 @@ export const userInitialState: IUserState = {
     id: 0,
     email: "",
     password: "",
-    first_name: "",
-    last_name: "",
+    firstName: "",
+    lastName: "",
   },
 };
 export const actionChangeUserStateInfo = createAction<{
   newValue: string;
-  fieldName: "last_name" | "first_name" | "email" | "password";
+  fieldName: "lastName" | "firstName" | "email" | "password";
 }>("user/CHANGE_USERINFO");
 
 const userReducer = createReducer(userInitialState, (builder) => {
@@ -30,8 +31,8 @@ const userReducer = createReducer(userInitialState, (builder) => {
     .addCase(login.fulfilled, (state, action) => {
       console.log("Action login fullfilled");
       state.connectedUser.id = action.payload.id;
-      state.connectedUser.first_name = action.payload.first_name;
-      state.connectedUser.last_name = action.payload.last_name;
+      state.connectedUser.firstName = action.payload.firstName;
+      state.connectedUser.lastName = action.payload.lastName;
       state.connectedUser.password = "";
       state.logged = true;
     })
@@ -40,6 +41,15 @@ const userReducer = createReducer(userInitialState, (builder) => {
     })
     .addCase(login.rejected, () => {
       console.log("Action login rejected");
+    })
+    .addCase(register.fulfilled, () => {
+      console.log("Action register fullfilled");
+    })
+    .addCase(register.pending, () => {
+      console.log("Action register pending");
+    })
+    .addCase(register.rejected, () => {
+      console.log("Action register rejected");
     });
 });
 

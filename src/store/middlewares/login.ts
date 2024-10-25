@@ -1,5 +1,4 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
-
 import type { RootState } from "../store";
 import { axiosInstance, addTokenToAxiosInstance } from "../../utils/axios";
 
@@ -15,6 +14,7 @@ const login = createAsyncThunk(
         password,
       });
 
+      console.log(result.data.token);
       addTokenToAxiosInstance(result.data.token);
 
       const result2 = await axiosInstance.post("/login_check", {

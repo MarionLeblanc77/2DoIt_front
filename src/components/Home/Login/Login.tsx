@@ -4,6 +4,7 @@ import { FormEvent } from "react";
 import { useAppDispatch, useAppSelector } from "../../../store/hooks-redux";
 import Field from "../../Field/Field";
 import login from "../../../store/middlewares/login";
+import register from "../../../store/middlewares/register";
 
 interface LoginProps {
   changeField: (value: string, name: "email" | "password") => void;
@@ -23,15 +24,20 @@ function Login({ changeField }: LoginProps) {
     changeField(value, name);
   };
 
-  const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
+  const handleSubmitLogin = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     dispatch(login());
+  };
+
+  const handleSubmitRegister = (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    dispatch(register());
   };
 
   return (
     <div className="login">
       <h1>Connexion</h1>
-      <form className="login" onSubmit={handleSubmit}>
+      <form className="login" onSubmit={handleSubmitLogin}>
         <p>
           Les champs obligatoires sont suivis par un
           <span aria-label="required"> *</span>
@@ -56,6 +62,10 @@ function Login({ changeField }: LoginProps) {
           search={false}
           edit={false}
         />
+        <button type="submit">Login </button>
+      </form>
+      <form className="register" onSubmit={handleSubmitRegister}>
+        <button type="submit">Register </button>
       </form>
     </div>
   );
