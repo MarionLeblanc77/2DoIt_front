@@ -15,3 +15,5 @@ Logo : maybe something expressing collaboration on top of getting things done ![
 Colors/Theme : white background / black text / grey or single color if smt else is needed
 
 ## Like / Dislike examples
+
+!["Layout example of Samsung Notes"]('C:\Code\2DoIt_front\Docs\layout_samsung_notes.jpg' "Layout example of Samsung Notes")
