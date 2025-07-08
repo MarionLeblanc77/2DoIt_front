@@ -1,0 +1,30 @@
+.app {
+  box-sizing: border-box;
+  background-color: #f0f2f5;
+  padding: 1rem;
+}
+
+.sections_container {
+  @media (min-width: 576px) {
+    display: grid;
+    grid-template-rows: masonry;
+    grid-template-columns: repeat(2, 1fr);
+  }
+  @media (min-width: 768px) {
+    grid-template-columns: repeat(3, 1fr);
+  }
+  @media (min-width: 1200px) {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+.section {
+  background-color: white;
+  margin: 2rem;
+  padding: 1rem;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  width: 100%;
+  height: 100px;
+}
+

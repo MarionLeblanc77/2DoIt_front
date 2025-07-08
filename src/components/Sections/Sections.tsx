@@ -1,18 +1,9 @@
 import "./Sections.scss";
-import type { ITask } from "../../@types/app";
+import type { ISection, ITask } from "../../@types/app";
 
-type SectionProps = {
-  title: string;
-  tasks: ITask[];
-  lastUpdatedDate: Date;
-};
-export default function Section({
-  title,
-  tasks,
-  lastUpdatedDate,
-}: SectionProps) {
+export default function Section({ title, tasks, lastUpdatedDate }: ISection) {
   return (
-    <div>
+    <div className="section_content">
       <h2>{title}</h2>
       <ul>
         {tasks.map((task) => (
@@ -23,3 +14,4 @@ export default function Section({
     </div>
   );
 }
+
