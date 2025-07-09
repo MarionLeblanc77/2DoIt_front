@@ -1,9 +1,14 @@
 import "./Sections.scss";
-import type { ISection, ITask } from "../../@types/app";
+import type { ISection } from "../../@types/app";
 
-export default function Section({ title, tasks, lastUpdatedDate }: ISection) {
+export default function Section({
+  id,
+  title,
+  tasks,
+  lastUpdatedDate,
+}: ISection) {
   return (
-    <div className="section_content">
+    <div className={"section_content ".concat("section", id.toString())}>
       <h2>{title}</h2>
       <ul>
         {tasks.map((task) => (
