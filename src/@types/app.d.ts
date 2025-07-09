@@ -1,4 +1,4 @@
-export interface ISection {
+export interface ITodoList {
   id: number;
   title: string;
   tasks: ITask[];

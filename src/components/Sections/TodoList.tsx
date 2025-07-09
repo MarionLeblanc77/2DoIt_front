@@ -1,12 +1,12 @@
-import "./Sections.scss";
-import type { ISection } from "../../@types/app";
+import "./TodoList.scss";
+import type { ITodoList } from "../../@types/app";
 
-export default function Section({
+export default function TodoList({
   id,
   title,
   tasks,
   lastUpdatedDate,
-}: ISection) {
+}: ITodoList) {
   return (
     <div className={"section_content ".concat("section", id.toString())}>
       <h2>{title}</h2>

@@ -1,9 +1,9 @@
 /* eslint-disable no-plusplus */
 import { useEffect, useMemo, useState } from "react";
-import { ISection } from "../@types/app";
+import { ITodoList } from "../@types/app";
 import getNbColumns from "../utils/app";
 import "./App.scss";
-import Section from "./Sections/Sections";
+import TodoList from "./Sections/TodoList";
 import data from "../utils/tempData";
 
 function App() {
@@ -18,14 +18,14 @@ function App() {
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
-  const sections: ISection[][] = useMemo(() => {
+  const formatedTodoLists: ITodoList[][] = useMemo(() => {
     if (nbColumns === 1) {
       return [data];
     }
-    const result: ISection[][] = [];
+    const result: ITodoList[][] = [];
 
     for (let i = 0; i < nbColumns; i++) {
-      let subSection: ISection[] = [];
+      let subSection: ITodoList[] = [];
       subSection = [data[i]];
       subSection.push(
         ...data.filter((_, index) => index > i && index % nbColumns === i)
@@ -37,16 +37,16 @@ function App() {
 
   return (
     <div className="app">
-      <div className="sections_container">
-        {sections.map((subSection) => (
-          <div key={subSection[0]?.id} className="subsection__column">
-            {subSection.map((section) => (
-              <div key={section.id} className="subsection__column">
-                <Section
-                  id={section.id}
-                  title={section.title}
-                  tasks={section.tasks}
-                  lastUpdatedDate={section.lastUpdatedDate}
+      <div className="todolists_container">
+        {formatedTodoLists.map((subSection) => (
+          <div key={subSection[0]?.id} className="todolists__column">
+            {subSection.map((todoList) => (
+              <div key={todoList.id} className="todolist__container">
+                <TodoList
+                  id={todoList.id}
+                  title={todoList.title}
+                  tasks={todoList.tasks}
+                  lastUpdatedDate={todoList.lastUpdatedDate}
                 />
               </div>
             ))}
