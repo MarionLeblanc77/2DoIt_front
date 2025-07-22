@@ -1,14 +1,29 @@
 import { Route, Routes } from "react-router-dom";
+import { useAppSelector } from "../../store/hooks-redux";
 import "./App.scss";
-import Nav from "./Nav/Nav";
-import List from "./List/List";
+import Dashboard from "./Dashboard/Dashboard";
 
 function App() {
+  const logged = useAppSelector((state) => state.userReducer.logged);
+
   return (
-    <div className="App">
-      <Nav />
+    <div className="app">
       <Routes>
-        <Route path="/" element={<List />} />
+        <Route
+          path="/connexion"
+          element={<LoginForm changeField={changeUserField} />}
+        />
+        <Route
+          path="/inscription"
+          element={<RegisterForm changeField={changeUserField} />}
+        />
+
+        {logged ? (
+          <Route path="/" element={<Dashboard />} />
+        ) : (
+          <Route path="/" element={<Home />} />
+        )}
+        <Route path="/*" element={<Error />} />
       </Routes>
     </div>
   );
