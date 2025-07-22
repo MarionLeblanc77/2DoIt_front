@@ -61,4 +61,3 @@ const data: ISection[] = [
 ];
 
 export default data;
-

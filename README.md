@@ -32,13 +32,13 @@ Renseigner :
 git@github.com:MarionLeblanc77/2DoIt_front.git
 ```
 
-La première fois, cette installation lance VSC, installe les dépendances et active aussi le serveur de dev sur localhost:5173. Le site est normalement accessible sur http://localhost:5173/.
+La première fois, cette installation lance VSC, installe les dépendances et active aussi le serveur de dev sur localhost:5173. Le site est normalement accessible sur <http://localhost:5173/>.
 
 </details>
 
 ### RUN LOCALLY
 
-Run on http://localhost:5173/ with:
+Run on <http://localhost:5173/> with:
 
 ```bash
 pnpm dev
@@ -48,7 +48,7 @@ pnpm dev
 
 This template is the original base template of vite that provides a minimal setup to get React working in Vite with HMR and some ESLint rules + a few changes.
 
-## READ-ME FROM VITE TEMPLATE
+### READ-ME FROM VITE TEMPLATE
 
 Currently, two official plugins are available:
 
@@ -57,9 +57,9 @@ Currently, two official plugins are available:
 
 ### Done on top of base VITE config
 
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
+##### Expanding the ESLint configuration
 
-- Configure the top-level `parserOptions` property like this:
+- Configured the top-level `parserOptions` property like this:
 
 ```js
 export default {
@@ -73,11 +73,11 @@ export default {
 };
 ```
 
-- Replace `plugin:@typescript-eslint/recommended` to `plugin:@typescript-eslint/recommended-type-checked` or `plugin:@typescript-eslint/strict-type-checked`
-- Optionally add `plugin:@typescript-eslint/stylistic-type-checked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and add `plugin:react/recommended` & `plugin:react/jsx-runtime` to the `extends` list
+- Replaced `plugin:@typescript-eslint/recommended` to `plugin:@typescript-eslint/recommended-type-checked` ~~ or `plugin:@typescript-eslint/strict-type-checked`~~
+- Added `plugin:@typescript-eslint/stylistic-type-checked` (optionnal)
+- Installed [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and added `plugin:react/recommended` & `plugin:react/jsx-runtime` to the `extends` list
 
-## READ-ME FROM MARION
+#### Additionnal additions
 
 - eslint d'Airbnb (une référence)
 - sass

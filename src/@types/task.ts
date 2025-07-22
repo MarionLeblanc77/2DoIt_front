@@ -10,4 +10,3 @@ export interface ITask {
   content: string;
   users: number[];
 }
-
