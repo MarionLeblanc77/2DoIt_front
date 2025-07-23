@@ -1,4 +1,4 @@
-import "./TodoList.scss";
+import "./Section.scss";
 import type { ISection } from "../../@types/task";
 
 export default function TodoList({
