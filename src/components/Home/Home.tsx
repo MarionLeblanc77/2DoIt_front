@@ -1,24 +1,18 @@
-import { Power } from "react-feather";
 import DOMPurify from "dompurify";
-import { useNavigate } from "react-router-dom";
-import { useAppDispatch, useAppSelector } from "../../store/hooks-redux";
-import {
-  actionChangeUserStateInfo,
-  actionLogout,
-} from "../../store/reducers/userReducer";
-import List from "../List/List";
+import { useState, FormEvent } from "react";
+import { useAppDispatch } from "../../store/hooks-redux";
 import "./Home.scss";
 import Login from "./Login/Login";
+import Register from "./Register/Register";
+import { actionChangeUserStateInfo } from "../../store/reducers/userReducer";
+import login from "../../store/middlewares/login";
 
 function Home() {
-  const logged = useAppSelector((state) => state.userReducer.logged);
-
   const dispatch = useAppDispatch();
-  const navigate = useNavigate();
 
   const changeUserField = (
     value: string,
-    name: "lastName" | "firstName" | "email" | "password"
+    name: "firstName" | "lastName" | "email" | "password"
   ) => {
     dispatch(
       actionChangeUserStateInfo({
@@ -28,24 +22,78 @@ function Home() {
     );
   };
 
-  const handleClickLogout = () => {
-    dispatch(actionLogout());
-    navigate("/");
+  const loginContent = <Login changeField={changeUserField} />;
+  const registerContent = <Register changeField={changeUserField} />;
+
+  const tabs = [
+    {
+      id: 1,
+      title: "Login",
+      content: {
+        fields: loginContent,
+        buttonLabel: "Connection",
+      },
+    },
+    {
+      id: 2,
+      title: "Register",
+      content: {
+        fields: registerContent,
+        buttonLabel: "Register",
+      },
+    },
+  ];
+  const [activeTab, setActiveTab] = useState(tabs[0].id);
+
+  const handleTabClick = (tabId: number) => {
+    setActiveTab(tabId);
+  };
+
+  const handleSubmitLogin = (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    dispatch(login());
   };
 
   return (
     <div className="home">
-      {logged ? (
-        <div>
-          <List />{" "}
-          <button type="button" className="logout" onClick={handleClickLogout}>
-            <Power className="logout--icon" />
-            <p>Se déconnecter</p>
-          </button>
+      <div className="tabs-container">
+        <div className="tabs">
+          {tabs.map((tab) => (
+            <button
+              key={tab.id}
+              role="tab"
+              type="button"
+              tabIndex={0}
+              aria-controls={`tabpanel-${tab.id}`}
+              className={`tab ${
+                activeTab !== tab.id ? "inactive" : ""
+              } tabs-button`}
+              onClick={() => handleTabClick(tab.id)}
+            >
+              {tab.title}
+            </button>
+          ))}
         </div>
-      ) : (
-        <Login changeField={changeUserField} />
-      )}
+        <div className="tab-content">
+          {tabs.map((tab) => (
+            <div
+              key={tab.id}
+              role="tabpanel"
+              aria-labelledby={`tab-${tab.id}`}
+              className={`tab-panel ${activeTab === tab.id ? "active" : ""}`}
+            >
+              <form className="login" onSubmit={handleSubmitLogin}>
+                <p>
+                  Mandatory fields are followed by a
+                  <span aria-label="required"> *</span>
+                </p>
+                {tab.content.fields}
+                <button type="submit">{tab.content.buttonLabel}</button>
+              </form>
+            </div>
+          ))}
+        </div>
+      </div>
     </div>
   );
 }

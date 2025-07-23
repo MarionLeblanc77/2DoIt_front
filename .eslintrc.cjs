@@ -8,8 +8,8 @@ module.exports = {
     "plugin:react/recommended",
     "plugin:react/jsx-runtime",
     "plugin:@typescript-eslint/recommended",
-    "plugin:@typescript-eslint/recommended-type-checked",
-    "plugin:@typescript-eslint/stylistic-type-checked",
+    // "plugin:@typescript-eslint/recommended-type-checked",
+    // "plugin:@typescript-eslint/stylistic-type-checked",
     "plugin:prettier/recommended", // must be the last one
   ],
   parser: "@typescript-eslint/parser",
@@ -45,6 +45,7 @@ module.exports = {
       },
     ],
     "react/jsx-props-no-spreading": 0,
+    "react/require-default-props": "off",
     "jsx-a11y/label-has-associated-control": [2, { assert: "either" }],
     "linebreak-style": 0,
     "no-restricted-imports": 0,

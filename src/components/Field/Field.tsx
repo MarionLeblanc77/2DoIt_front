@@ -1,6 +1,5 @@
 import { ChangeEvent, useId } from "react";
 import "./Field.scss";
-import { Edit, Search } from "react-feather";
 
 interface FieldProps {
   fieldDisplayedName: string;
@@ -10,8 +9,6 @@ interface FieldProps {
   placeholder: string;
   onChange: (value: string) => void;
   required: boolean;
-  search: boolean;
-  edit: boolean;
 }
 
 function Field({
@@ -22,8 +19,6 @@ function Field({
   placeholder,
   onChange,
   required,
-  search,
-  edit,
 }: FieldProps) {
   const inputId = useId();
 
@@ -42,12 +37,6 @@ function Field({
           <p className="field__instructions">({instructions})</p>
         )}
         <div className="field__inputcontainer">
-          <div
-            className="field__inputcontainer--hiddenlabel"
-            aria-hidden="true"
-          >
-            {placeholder}
-          </div>
           <div className="field__inputcontainer--field">
             <input
               className="field__inputcontainer--input"
@@ -58,16 +47,6 @@ function Field({
               placeholder={placeholder}
               required={required}
             />
-            {search && (
-              <button className="field__inputcontainer--icon" type="submit">
-                <Search />
-              </button>
-            )}
-            {edit && (
-              <span className="field__inputcontainer--icon">
-                <Edit />
-              </span>
-            )}
           </div>
         </div>
       </div>

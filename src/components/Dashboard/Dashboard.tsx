@@ -1,12 +1,19 @@
 /* eslint-disable no-plusplus */
 import { useEffect, useMemo, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { Power } from "react-feather";
 import "./Dashboard.scss";
 import Section from "../Section/Section";
 import { ISection } from "../../@types/task";
 import getNbColumns from "../../utils/app";
 import data from "../../utils/tempData";
+import { useAppDispatch } from "../../store/hooks-redux";
+import { actionLogout } from "../../store/reducers/userReducer";
 
 export default function Dashboard() {
+  const navigate = useNavigate();
+  const dispatch = useAppDispatch();
+
   const [nbColumns, setNbColumns] = useState(getNbColumns());
 
   useEffect(() => {
@@ -34,8 +41,20 @@ export default function Dashboard() {
     }
     return result;
   }, [nbColumns]);
+
+  const handleClickLogout = () => {
+    dispatch(actionLogout());
+    navigate("/");
+  };
+
   return (
-    <div className="todolists_container">
+    <>
+      <div className="dashboard">
+        <button type="button" className="logout" onClick={handleClickLogout}>
+          <Power className="logout--icon" />
+          <p>Se déconnecter</p>
+        </button>
+      </div>
       {formatedTodoLists.map((subSection) => (
         <div key={subSection[0]?.id} className="todolists__column">
           {subSection.map((todoList) => (
@@ -50,6 +69,6 @@ export default function Dashboard() {
           ))}
         </div>
       ))}
-    </div>
+    </>
   );
 }
