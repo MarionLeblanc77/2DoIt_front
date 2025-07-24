@@ -28,26 +28,22 @@ function Field({
 
   return (
     <div className="field">
-      <div className="fieldwithicon">
-        <label htmlFor={inputId} className="field__label">
-          {fieldDisplayedName}
-          {required === true && <span aria-label="required">* </span>}
-        </label>
-        {instructions && (
-          <p className="field__instructions">({instructions})</p>
-        )}
-        <div className="field__inputcontainer">
-          <div className="field__inputcontainer--field">
-            <input
-              className="field__inputcontainer--input"
-              type={type}
-              value={value}
-              onChange={handleChange}
-              id={inputId}
-              placeholder={placeholder}
-              required={required}
-            />
-          </div>
+      <label htmlFor={inputId} className="field__label">
+        {fieldDisplayedName}
+        {required === true && <span aria-label="required">* </span>}
+      </label>
+      {instructions && <p className="field__instructions">({instructions})</p>}
+      <div className="field__inputcontainer">
+        <div className="field__inputcontainer--field">
+          <input
+            className="field__inputcontainer--input"
+            type={type}
+            value={value}
+            onChange={handleChange}
+            id={inputId}
+            placeholder={placeholder}
+            required={required}
+          />
         </div>
       </div>
     </div>

@@ -25,6 +25,15 @@ function Home() {
   const loginContent = <Login changeField={changeUserField} />;
   const registerContent = <Register changeField={changeUserField} />;
 
+  const handleSubmitLogin = (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    dispatch(login());
+  };
+
+  const handleSubmitRegister = () => {
+    dispatch(register());
+  };
+
   const tabs = [
     {
       id: 1,
@@ -33,6 +42,7 @@ function Home() {
         fields: loginContent,
         buttonLabel: "Connection",
       },
+      action: handleSubmitLogin,
     },
     {
       id: 2,
@@ -41,6 +51,7 @@ function Home() {
         fields: registerContent,
         buttonLabel: "Register",
       },
+      action: handleSubmitRegister,
     },
   ];
   const [activeTab, setActiveTab] = useState(tabs[0].id);
@@ -49,15 +60,10 @@ function Home() {
     setActiveTab(tabId);
   };
 
-  const handleSubmitLogin = (event: FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    dispatch(login());
-  };
-
   return (
     <div className="home">
       <div className="tabs-container">
-        <div className="tabs">
+        <div className="tabs-header">
           {tabs.map((tab) => (
             <button
               key={tab.id}
@@ -65,16 +71,14 @@ function Home() {
               type="button"
               tabIndex={0}
               aria-controls={`tabpanel-${tab.id}`}
-              className={`tab ${
-                activeTab !== tab.id ? "inactive" : ""
-              } tabs-button`}
+              className={`tab-header ${activeTab !== tab.id ? "inactive" : ""}`}
               onClick={() => handleTabClick(tab.id)}
             >
               {tab.title}
             </button>
           ))}
         </div>
-        <div className="tab-content">
+        <div className="tabs-content">
           {tabs.map((tab) => (
             <div
               key={tab.id}
@@ -82,13 +86,15 @@ function Home() {
               aria-labelledby={`tab-${tab.id}`}
               className={`tab-panel ${activeTab === tab.id ? "active" : ""}`}
             >
-              <form className="login" onSubmit={handleSubmitLogin}>
-                <p>
+              <form onSubmit={tab.action}>
+                <p className="tab-panel-mandatory-fields">
                   Mandatory fields are followed by a
                   <span aria-label="required"> *</span>
                 </p>
                 {tab.content.fields}
-                <button type="submit">{tab.content.buttonLabel}</button>
+                <button className="tab-panel-button" type="submit">
+                  {tab.content.buttonLabel}
+                </button>
               </form>
             </div>
           ))}
