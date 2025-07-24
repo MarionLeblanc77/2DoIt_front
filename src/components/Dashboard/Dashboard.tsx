@@ -48,27 +48,33 @@ export default function Dashboard() {
   };
 
   return (
-    <>
-      <div className="dashboard">
-        <button type="button" className="logout" onClick={handleClickLogout}>
-          <Power className="logout--icon" />
-          <p>Se déconnecter</p>
+    <div className="dashboard">
+      <div className="dashboard-logout">
+        <button
+          type="button"
+          className="dashboard-logout-button button"
+          onClick={handleClickLogout}
+        >
+          <Power className="dashboard-logout-button-icon" size="18px" />
+          <p>Logout</p>
         </button>
       </div>
-      {formatedTodoLists.map((subSection) => (
-        <div key={subSection[0]?.id} className="todolists__column">
-          {subSection.map((todoList) => (
-            <div key={todoList.id} className="todolist__container">
-              <Section
-                id={todoList.id}
-                title={todoList.title}
-                tasks={todoList.tasks}
-                lastUpdatedDate={todoList.lastUpdatedDate}
-              />
-            </div>
-          ))}
-        </div>
-      ))}
-    </>
+      <div className="dashboard-sections">
+        {formatedTodoLists.map((subSection) => (
+          <div key={subSection[0]?.id}>
+            {subSection.map((todoList) => (
+              <div key={todoList.id} className="dashboard-section">
+                <Section
+                  id={todoList.id}
+                  title={todoList.title}
+                  tasks={todoList.tasks}
+                  lastUpdatedDate={todoList.lastUpdatedDate}
+                />
+              </div>
+            ))}
+          </div>
+        ))}
+      </div>
+    </div>
   );
 }

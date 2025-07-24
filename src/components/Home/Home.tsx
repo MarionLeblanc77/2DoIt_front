@@ -6,6 +6,7 @@ import Login from "./Login/Login";
 import Register from "./Register/Register";
 import { actionChangeUserStateInfo } from "../../store/reducers/userReducer";
 import login from "../../store/middlewares/login";
+import register from "../../store/middlewares/register";
 
 function Home() {
   const dispatch = useAppDispatch();
@@ -30,7 +31,8 @@ function Home() {
     dispatch(login());
   };
 
-  const handleSubmitRegister = () => {
+  const handleSubmitRegister = (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
     dispatch(register());
   };
 
@@ -92,7 +94,7 @@ function Home() {
                   <span aria-label="required"> *</span>
                 </p>
                 {tab.content.fields}
-                <button className="tab-panel-button" type="submit">
+                <button className="tab-panel-button button" type="submit">
                   {tab.content.buttonLabel}
                 </button>
               </form>
