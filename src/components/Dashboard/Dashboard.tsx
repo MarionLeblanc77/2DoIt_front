@@ -6,13 +6,22 @@ import "./Dashboard.scss";
 import Section from "../Section/Section";
 import { ISection } from "../../@types/task";
 import getNbColumns from "../../utils/app";
-import data from "../../utils/tempData";
-import { useAppDispatch } from "../../store/hooks-redux";
+import { useAppDispatch, useAppSelector } from "../../store/hooks-redux";
 import { actionLogout } from "../../store/reducers/userReducer";
+import getUserSections from "../../store/middlewares/getUserSections";
 
 export default function Dashboard() {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
+
+  const userSections = useAppSelector((state) => state.taskReducer.sections);
+
+  console.log("userSections", userSections);
+
+  useEffect(() => {
+    console.log("Dashboard useEffect");
+    dispatch(getUserSections());
+  }, [dispatch]);
 
   const [nbColumns, setNbColumns] = useState(getNbColumns());
 
@@ -27,20 +36,24 @@ export default function Dashboard() {
 
   const formatedTodoLists: ISection[][] = useMemo(() => {
     if (nbColumns === 1) {
-      return [data];
+      return [userSections];
     }
     const result: ISection[][] = [];
 
     for (let i = 0; i < nbColumns; i++) {
       let subSection: ISection[] = [];
-      subSection = [data[i]];
+      subSection = [userSections[i]];
       subSection.push(
-        ...data.filter((_, index) => index > i && index % nbColumns === i)
+        ...userSections.filter(
+          (_, index) => index > i && index % nbColumns === i
+        )
       );
       result.push(subSection);
     }
     return result;
-  }, [nbColumns]);
+  }, [nbColumns, userSections]);
+
+  console.log("formatedTodoLists", formatedTodoLists);
 
   const handleClickLogout = () => {
     dispatch(actionLogout());
@@ -61,17 +74,25 @@ export default function Dashboard() {
       </div>
       <div className="dashboard-sections">
         {formatedTodoLists.map((subSection) => (
-          <div key={subSection[0]?.id}>
-            {subSection.map((todoList) => (
-              <div key={todoList.id} className="dashboard-section">
-                <Section
-                  id={todoList.id}
-                  title={todoList.title}
-                  tasks={todoList.tasks}
-                  lastUpdatedDate={todoList.lastUpdatedDate}
-                />
-              </div>
-            ))}
+          <div
+            key={subSection
+              .filter(Boolean)
+              .map((section) => section.id)
+              .join("-")}
+          >
+            {subSection.map((section) => {
+              if (!section) return null;
+              return (
+                <div key={section.id} className="dashboard-section">
+                  <Section
+                    id={section.id}
+                    title={section.title}
+                    tasks={section.tasks}
+                    lastUpdatedDate={section.lastUpdatedDate}
+                  />
+                </div>
+              );
+            })}
           </div>
         ))}
       </div>

@@ -1,3 +1,4 @@
+import { CheckSquare, Square } from "react-feather";
 import "./Section.scss";
 import type { ISection } from "../../@types/task";
 
@@ -8,14 +9,18 @@ export default function TodoList({
   lastUpdatedDate,
 }: ISection) {
   return (
-    <div className={"section_content ".concat("section", id.toString())}>
-      <h2>{title}</h2>
-      <ul>
+    <div className={"section ".concat("section", id.toString())}>
+      <h2 className="section-title">{title}</h2>
+      <ul className="section-tasks">
         {tasks.map((task) => (
-          <li key={task.id}>{task.content}</li>
+          <li className="section-task" key={task.id}>
+            <Square />
+            <CheckSquare />
+            {task.content}
+          </li>
         ))}
       </ul>
-      <small>{lastUpdatedDate.toDateString()}</small>
+      <small>{lastUpdatedDate}</small>
     </div>
   );
 }

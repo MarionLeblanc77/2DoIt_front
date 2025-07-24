@@ -2,7 +2,7 @@ export interface ISection {
   id: number;
   title: string;
   tasks: ITask[];
-  lastUpdatedDate: Date;
+  lastUpdatedDate: string;
 }
 
 export interface ITask {

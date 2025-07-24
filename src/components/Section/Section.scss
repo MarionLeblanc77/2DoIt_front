@@ -1,0 +1,22 @@
+.section {
+  &-title {
+    line-height: 1.1;
+    margin-bottom: 0.5rem;
+  }
+  &0 {
+    color: lightgray;
+  }
+  &-tasks {
+    padding: 0 0.5rem;
+  }
+  &-task {
+    list-style: none;
+    padding-left: 0.3rem;
+    display: flex;
+    gap: 0.3rem;
+    &:hover {
+      background-color: rgba(0, 0, 0, 0.1);
+    }
+  }
+}
+
