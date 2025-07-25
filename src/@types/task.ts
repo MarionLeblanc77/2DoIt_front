@@ -9,4 +9,5 @@ export interface ITask {
   id: number;
   content: string;
   users: number[];
+  active: boolean;
 }

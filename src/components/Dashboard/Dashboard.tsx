@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable no-plusplus */
 import { useEffect, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
@@ -16,12 +17,9 @@ export default function Dashboard() {
 
   const userSections = useAppSelector((state) => state.taskReducer.sections);
 
-  console.log("userSections", userSections);
-
   useEffect(() => {
-    console.log("Dashboard useEffect");
     dispatch(getUserSections());
-  }, [dispatch]);
+  }, []);
 
   const [nbColumns, setNbColumns] = useState(getNbColumns());
 
@@ -52,8 +50,6 @@ export default function Dashboard() {
     }
     return result;
   }, [nbColumns, userSections]);
-
-  console.log("formatedTodoLists", formatedTodoLists);
 
   const handleClickLogout = () => {
     dispatch(actionLogout());

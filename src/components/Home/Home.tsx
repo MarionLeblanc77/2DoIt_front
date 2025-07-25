@@ -68,7 +68,7 @@ function Home() {
         <div className="tabs-header">
           {tabs.map((tab) => (
             <button
-              key={tab.id}
+              key={`tab-header-${tab.id}`}
               role="tab"
               type="button"
               tabIndex={0}
@@ -83,7 +83,7 @@ function Home() {
         <div className="tabs-content">
           {tabs.map((tab) => (
             <div
-              key={tab.id}
+              key={`tab-content-${tab.id}`}
               role="tabpanel"
               aria-labelledby={`tab-${tab.id}`}
               className={`tab-panel ${activeTab === tab.id ? "active" : ""}`}

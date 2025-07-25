@@ -10,11 +10,7 @@ function App() {
   return (
     <div className="app">
       <Routes>
-        {logged ? (
-          <Route path="/" element={<Dashboard />} />
-        ) : (
-          <Route path="/" element={<Home />} />
-        )}
+        <Route path="/" element={logged ? <Dashboard /> : <Home />} />
         {/* <Route path="/*" element={<Error />} /> */}
       </Routes>
     </div>

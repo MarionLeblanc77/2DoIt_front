@@ -13,9 +13,19 @@
     list-style: none;
     padding-left: 0.3rem;
     display: flex;
+    align-items: center;
     gap: 0.3rem;
-    &:hover {
+    &-item:hover {
       background-color: rgba(0, 0, 0, 0.1);
+    }
+    &-add {
+      color: lightgray;
+    }
+    &-input {
+      width: 100%;
+      border: none;
+      outline: none;
+      background-color: transparent;
     }
   }
 }

@@ -34,17 +34,15 @@ function Field({
       </label>
       {instructions && <p className="field__instructions">({instructions})</p>}
       <div className="field__inputcontainer">
-        <div className="field__inputcontainer--field">
-          <input
-            className="field__inputcontainer--input"
-            type={type}
-            value={value}
-            onChange={handleChange}
-            id={inputId}
-            placeholder={placeholder}
-            required={required}
-          />
-        </div>
+        <input
+          id={inputId}
+          className="field__inputcontainer--input"
+          type={type}
+          value={value}
+          onChange={handleChange}
+          placeholder={placeholder}
+          required={required}
+        />
       </div>
     </div>
   );
