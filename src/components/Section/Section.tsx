@@ -34,8 +34,6 @@ export default function Section({
         updateTask({
           id: taskId,
           content: updatedTask.content,
-          users: updatedTask.users,
-          active: updatedTask.active,
         })
       );
     }

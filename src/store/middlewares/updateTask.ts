@@ -4,9 +4,9 @@ import { axiosInstance } from "../../utils/axios";
 
 interface Props {
   id: number;
-  content: string;
-  users: number[];
-  active: boolean;
+  content?: string;
+  users?: number[];
+  active?: boolean;
 }
 
 const updateTask = createAsyncThunk(
