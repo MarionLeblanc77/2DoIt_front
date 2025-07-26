@@ -17,16 +17,36 @@
     gap: 0.3rem;
     &-item:hover {
       background-color: rgba(0, 0, 0, 0.1);
+      & .section-task-delete {
+        display: block;
+      }
     }
     &-add {
       color: lightgray;
+      :focus-within {
+        color: black;
+      }
     }
     &-input {
       width: 100%;
       border: none;
       outline: none;
       background-color: transparent;
+      color: inherit;
     }
+    &-delete {
+      display: none;
+      margin-right: 0.3rem;
+      cursor: pointer;
+    }
+  }
+  &-update {
+    display: block;
+    text-align: right;
+    font-style: italic;
+    font-size: 0.8em;
+    color: lightgray;
+    margin-top: 0.5rem;
   }
 }
 

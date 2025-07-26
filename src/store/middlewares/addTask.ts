@@ -3,22 +3,21 @@ import { createAsyncThunk } from "@reduxjs/toolkit";
 import { axiosInstance } from "../../utils/axios";
 
 interface Props {
-  id: number;
   content?: string;
-  users?: number[];
-  active?: boolean;
+  sectionId: number;
 }
 
-const updateTask = createAsyncThunk(
-  "task/UPDATE_TASK",
+const addTask = createAsyncThunk(
+  "task/ADD_TASK",
   async (payload: Props, thunkAPI) => {
     try {
-      const result = await axiosInstance.put(`/task/${payload.id}`, {
-        content: payload.content,
-        users: payload.users,
-        active: payload.active,
-      });
-      return result.data;
+      const result = await axiosInstance.post(
+        `/task/section/${payload.sectionId}`,
+        {
+          content: payload.content,
+        }
+      );
+      return { result: result.data, sectionId: payload.sectionId };
     } catch (err: any) {
       const result: string | string[] = err.response.data.errors;
       return thunkAPI.rejectWithValue(result);
@@ -26,4 +25,5 @@ const updateTask = createAsyncThunk(
   }
 );
 
-export default updateTask;
+export default addTask;
+
