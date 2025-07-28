@@ -4,10 +4,16 @@ import DOMPurify from "dompurify";
 import "./Section.scss";
 import type { ISection } from "../../@types/task";
 import { useAppDispatch } from "../../store/hooks-redux";
-import { actionChangeTaskStateInfo } from "../../store/reducers/taskReducer";
+import {
+  actionChangeSectionStateInfo,
+  actionChangeTaskStateInfo,
+} from "../../store/reducers/taskReducer";
 import updateTask from "../../store/middlewares/updateTask";
 import addTask from "../../store/middlewares/addTask";
 import deleteTask from "../../store/middlewares/deleteTask";
+import updateSection from "../../store/middlewares/updateSection";
+import deleteSection from "../../store/middlewares/deleteSection";
+import addSection from "../../store/middlewares/addSection";
 
 export default function Section({
   id,
@@ -19,13 +25,24 @@ export default function Section({
 
   const [newTaskContent, setNewTaskContent] = useState<string>("");
 
-  const handleChangeContent =
+  const handleChangeTaskContent =
     (taskId?: number) => (event: ChangeEvent<HTMLInputElement>) => {
       dispatch(
         actionChangeTaskStateInfo({
           sectionId: id,
           taskId,
           fieldName: "content",
+          newValue: DOMPurify.sanitize(event.target.value),
+        })
+      );
+    };
+
+  const handleChangeSectionTitle =
+    () => (event: ChangeEvent<HTMLInputElement>) => {
+      dispatch(
+        actionChangeSectionStateInfo({
+          sectionId: id,
+          fieldName: "title",
           newValue: DOMPurify.sanitize(event.target.value),
         })
       );
@@ -43,6 +60,19 @@ export default function Section({
     }
   };
 
+  const handleSubmitTitle = () => () => {
+    if (id === 0) {
+      dispatch(addSection({ title }));
+    } else {
+      dispatch(
+        updateSection({
+          id,
+          title,
+        })
+      );
+    }
+  };
+
   const handleAddTask = () => () => {
     dispatch(
       addTask({
@@ -55,7 +85,21 @@ export default function Section({
 
   return (
     <div className={"section ".concat("section", id.toString())}>
-      <h2 className="section-title">{title}</h2>
+      <h2 className="section-title">
+        <input
+          className="section-title-input input"
+          type="text"
+          value={title}
+          onChange={handleChangeSectionTitle()}
+          onBlur={handleSubmitTitle()}
+          placeholder={id === 0 ? "Add a new task..." : ""}
+        />
+        <Trash2
+          className="section-task-delete"
+          size="1.2rem"
+          onClick={() => dispatch(deleteSection({ id }))}
+        />
+      </h2>
       <ul className="section-tasks">
         {tasks.map((task) => (
           <li className="section-task section-task-item" key={task.id}>
@@ -65,10 +109,10 @@ export default function Section({
               <CheckSquare size="1.2rem" />
             )}
             <input
-              className="section-task-input"
+              className="section-task-input input"
               type="text"
               value={task.content}
-              onChange={handleChangeContent(task.id)}
+              onChange={handleChangeTaskContent(task.id)}
               onBlur={handleSubmitContent(task.id)}
             />
             <Trash2
@@ -81,7 +125,7 @@ export default function Section({
         <li className="section-task section-task-add">
           <Square size="1.2rem" />
           <input
-            className="section-task-input"
+            className="section-task-input input"
             type="text"
             value={newTaskContent}
             onChange={(e) => setNewTaskContent(e.target.value)}
@@ -90,9 +134,11 @@ export default function Section({
           />
         </li>
       </ul>
-      <small className="section-update">
-        Last updated on {lastUpdatedDate}
-      </small>
+      {id !== 0 && (
+        <small className="section-update">
+          Last updated on WIP not done {lastUpdatedDate}
+        </small>
+      )}
     </div>
   );
 }

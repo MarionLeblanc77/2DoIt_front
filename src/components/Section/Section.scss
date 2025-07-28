@@ -27,13 +27,6 @@
         color: black;
       }
     }
-    &-input {
-      width: 100%;
-      border: none;
-      outline: none;
-      background-color: transparent;
-      color: inherit;
-    }
     &-delete {
       display: none;
       margin-right: 0.3rem;
@@ -48,5 +41,13 @@
     color: lightgray;
     margin-top: 0.5rem;
   }
+}
+
+.input {
+  width: 100%;
+  border: none;
+  outline: none;
+  background-color: transparent;
+  color: inherit;
 }
 
