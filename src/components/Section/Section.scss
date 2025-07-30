@@ -2,6 +2,8 @@
   &-title {
     line-height: 1.1;
     margin-bottom: 0.5rem;
+    display: flex;
+    align-items: center;
   }
   &0 {
     color: lightgray;
@@ -15,22 +17,12 @@
     display: flex;
     align-items: center;
     gap: 0.3rem;
-    &-item:hover {
-      background-color: rgba(0, 0, 0, 0.1);
-      & .section-task-delete {
-        display: block;
-      }
-    }
+
     &-add {
       color: lightgray;
       :focus-within {
         color: black;
       }
-    }
-    &-delete {
-      display: none;
-      margin-right: 0.3rem;
-      cursor: pointer;
     }
   }
   &-update {
@@ -43,6 +35,19 @@
   }
 }
 
+.editable-element:hover {
+  background-color: rgba(0, 0, 0, 0.1);
+  & .delete-icon {
+    display: block;
+  }
+}
+
+.delete-icon {
+  display: none;
+  margin-right: 0.3rem;
+  cursor: pointer;
+}
+
 .input {
   width: 100%;
   border: none;
@@ -50,4 +55,3 @@
   background-color: transparent;
   color: inherit;
 }
-

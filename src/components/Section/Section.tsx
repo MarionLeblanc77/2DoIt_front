@@ -85,7 +85,7 @@ export default function Section({
 
   return (
     <div className={"section ".concat("section", id.toString())}>
-      <h2 className="section-title">
+      <h2 className="section-title editable-element">
         <input
           className="section-title-input input"
           type="text"
@@ -95,14 +95,14 @@ export default function Section({
           placeholder={id === 0 ? "Add a new task..." : ""}
         />
         <Trash2
-          className="section-task-delete"
+          className="delete-icon"
           size="1.2rem"
           onClick={() => dispatch(deleteSection({ id }))}
         />
       </h2>
       <ul className="section-tasks">
         {tasks.map((task) => (
-          <li className="section-task section-task-item" key={task.id}>
+          <li className="section-task editable-element" key={task.id}>
             {task.active ? (
               <Square size="1.2rem" />
             ) : (
@@ -116,7 +116,7 @@ export default function Section({
               onBlur={handleSubmitContent(task.id)}
             />
             <Trash2
-              className="section-task-delete"
+              className="delete-icon"
               size="1.2rem"
               onClick={() => dispatch(deleteTask({ id: task.id }))}
             />
