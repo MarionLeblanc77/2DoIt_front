@@ -39,14 +39,18 @@ export default function Dashboard() {
     const result: ISection[][] = [];
 
     for (let i = 0; i < nbColumns; i++) {
-      let subSection: ISection[] = [];
-      subSection = [userSections[i]];
+      const subSection: ISection[] = [];
+      if (userSections[i]) {
+        subSection.push(userSections[i]);
+      }
       subSection.push(
         ...userSections.filter(
           (_, index) => index > i && index % nbColumns === i
         )
       );
-      result.push(subSection);
+      if (subSection.length > 0) {
+        result.push(subSection);
+      }
     }
     return result;
   }, [nbColumns, userSections]);

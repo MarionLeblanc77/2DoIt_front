@@ -130,7 +130,7 @@ const taskReducer = createReducer(taskInitialState, (builder) => {
         }
         return section;
       });
-      console.log("Action addSection fullfilled");
+      state.sections.push(state.sections.splice(-2, 1)[0]);
     })
     .addCase(addSection.pending, () => {
       console.log("Action addSection pending");
