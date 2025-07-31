@@ -6,17 +6,25 @@
   font-family: sans-serif;
 }
 
-.button {
-  padding: 6px 14px;
-  background-color: white;
-  border-radius: 8px;
+%button-base {
+  background-color: transparent;
   border: none;
-  box-shadow: 0px 0.5px 2px 1px rgba(0, 0, 0, 0.1);
   touch-action: manipulation;
   cursor: pointer;
-  &:focus {
-    box-shadow: inset -2px -2px 5px rgba(0, 0, 0, 0.1),
-      inset 2px 2px 5px rgba(0, 0, 0, 0.1);
-    background-color: rgba(0, 0, 0, 0.055);
+}
+
+.button {
+  @extend %button-base;
+  &-volume {
+    @extend %button-base;
+    padding: 6px 14px;
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0px 0.5px 2px 1px rgba(0, 0, 0, 0.1);
+    &:focus {
+      box-shadow: inset -2px -2px 5px rgba(0, 0, 0, 0.1),
+        inset 2px 2px 5px rgba(0, 0, 0, 0.1);
+      background-color: rgba(0, 0, 0, 0.055);
+    }
   }
 }

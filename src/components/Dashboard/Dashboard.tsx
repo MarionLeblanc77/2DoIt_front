@@ -1,25 +1,13 @@
-/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable no-plusplus */
 import { useEffect, useMemo, useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { Power } from "react-feather";
 import "./Dashboard.scss";
 import Section from "../Section/Section";
 import { ISection } from "../../@types/task";
 import getNbColumns from "../../utils/app";
-import { useAppDispatch, useAppSelector } from "../../store/hooks-redux";
-import { actionLogout } from "../../store/reducers/userReducer";
-import getUserSections from "../../store/middlewares/getUserSections";
+import { useAppSelector } from "../../store/hooks-redux";
 
 export default function Dashboard() {
-  const navigate = useNavigate();
-  const dispatch = useAppDispatch();
-
   const userSections = useAppSelector((state) => state.taskReducer.sections);
-
-  useEffect(() => {
-    dispatch(getUserSections());
-  }, []);
 
   const [nbColumns, setNbColumns] = useState(getNbColumns());
 
@@ -55,47 +43,30 @@ export default function Dashboard() {
     return result;
   }, [nbColumns, userSections]);
 
-  const handleClickLogout = () => {
-    dispatch(actionLogout());
-    navigate("/");
-  };
-
   return (
     <div className="dashboard">
-      <div className="dashboard-logout">
-        <button
-          type="button"
-          className="dashboard-logout-button button"
-          onClick={handleClickLogout}
+      {formatedTodoLists.map((subSection) => (
+        <div
+          key={subSection
+            .filter(Boolean)
+            .map((section) => section.id)
+            .join("-")}
         >
-          <Power className="dashboard-logout-button-icon" size="18px" />
-          <p>Logout</p>
-        </button>
-      </div>
-      <div className="dashboard-sections">
-        {formatedTodoLists.map((subSection) => (
-          <div
-            key={subSection
-              .filter(Boolean)
-              .map((section) => section.id)
-              .join("-")}
-          >
-            {subSection.map((section) => {
-              if (!section) return null;
-              return (
-                <div key={section.id} className="dashboard-section">
-                  <Section
-                    id={section.id}
-                    title={section.title}
-                    tasks={section.tasks}
-                    lastUpdatedDate={section.lastUpdatedDate}
-                  />
-                </div>
-              );
-            })}
-          </div>
-        ))}
-      </div>
+          {subSection.map((section) => {
+            if (!section) return null;
+            return (
+              <div key={section.id} className="dashboard-section">
+                <Section
+                  id={section.id}
+                  title={section.title}
+                  tasks={section.tasks}
+                  lastUpdatedDate={section.lastUpdatedDate}
+                />
+              </div>
+            );
+          })}
+        </div>
+      ))}
     </div>
   );
 }

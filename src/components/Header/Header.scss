@@ -1,0 +1,29 @@
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+  &-account,
+  &-dashboard {
+    display: flex;
+    &-button {
+      display: flex;
+      gap: 0.3rem;
+      &-icon {
+        margin-top: 2px;
+      }
+    }
+  }
+  &-logout {
+    display: flex;
+    justify-content: flex-end;
+    &-button {
+      display: flex;
+      gap: 0.3rem;
+      &-icon {
+        margin-top: 3px;
+      }
+    }
+  }
+}
+

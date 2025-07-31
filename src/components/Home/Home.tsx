@@ -94,7 +94,10 @@ function Home() {
                   <span aria-label="required"> *</span>
                 </p>
                 {tab.content.fields}
-                <button className="tab-panel-button button" type="submit">
+                <button
+                  className="tab-panel-button button-volume"
+                  type="submit"
+                >
                   {tab.content.buttonLabel}
                 </button>
               </form>

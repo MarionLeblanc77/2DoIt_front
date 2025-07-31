@@ -6,6 +6,7 @@ const getUserSections = createAsyncThunk(
   async (_, thunkAPI) => {
     try {
       const result = await axiosInstance.get("/usersections");
+      console.log("getUserSections result:", result);
       return result.data;
     } catch (err: any) {
       const result: string | string[] = err.response.data.errors;

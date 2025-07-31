@@ -1,16 +1,31 @@
+/* eslint-disable react-hooks/exhaustive-deps */
+import { useEffect } from "react";
 import { Route, Routes } from "react-router-dom";
-import { useAppSelector } from "../store/hooks-redux";
+import { useAppDispatch, useAppSelector } from "../store/hooks-redux";
 import "./App.scss";
 import Home from "./Home/Home";
 import Dashboard from "./Dashboard/Dashboard";
+import Settings from "./Settings/Settings";
+import Header from "./Header/Header";
+import getUserSections from "../store/middlewares/getUserSections";
 
 function App() {
+  const dispatch = useAppDispatch();
   const logged = useAppSelector((state) => state.userReducer.logged);
+
+  useEffect(() => {
+    if (logged) {
+      dispatch(getUserSections());
+    }
+  }, [logged]);
 
   return (
     <div className="app">
+      {logged ? <Header /> : null}
       <Routes>
-        <Route path="/" element={logged ? <Dashboard /> : <Home />} />
+        {!logged && <Route path="/" element={<Home />} />}
+        <Route path="/" element={<Dashboard />} />
+        <Route path="/settings" element={<Settings />} />
         {/* <Route path="/*" element={<Error />} /> */}
       </Routes>
     </div>
