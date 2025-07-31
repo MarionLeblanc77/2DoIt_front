@@ -8,6 +8,8 @@ import Dashboard from "./Dashboard/Dashboard";
 import Settings from "./Settings/Settings";
 import Header from "./Header/Header";
 import getUserSections from "../store/middlewares/getUserSections";
+import getUserContacts from "../store/middlewares/getUserContacts";
+import Error from "./Error/Error";
 
 function App() {
   const dispatch = useAppDispatch();
@@ -16,6 +18,7 @@ function App() {
   useEffect(() => {
     if (logged) {
       dispatch(getUserSections());
+      dispatch(getUserContacts());
     }
   }, [logged]);
 
@@ -23,10 +26,14 @@ function App() {
     <div className="app">
       {logged ? <Header /> : null}
       <Routes>
-        {!logged && <Route path="/" element={<Home />} />}
-        <Route path="/" element={<Dashboard />} />
-        <Route path="/settings" element={<Settings />} />
-        {/* <Route path="/*" element={<Error />} /> */}
+        {!logged && <Route path="/*" element={<Home />} />}
+        {logged && (
+          <>
+            <Route path="/" element={<Dashboard />} />
+            <Route path="/settings" element={<Settings />} />
+            <Route path="/*" element={<Error />} />
+          </>
+        )}
       </Routes>
     </div>
   );

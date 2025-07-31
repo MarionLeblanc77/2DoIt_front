@@ -1,11 +1,11 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import { axiosInstance } from "../../utils/axios";
 
-const getUserSections = createAsyncThunk(
-  "task/GET_USER_SECTIONS",
+const getUserContacts = createAsyncThunk(
+  "user/GET_USER_CONTACTS",
   async (_, thunkAPI) => {
     try {
-      const result = await axiosInstance.get("/usersections");
+      const result = await axiosInstance.get("/user/contacts");
       return result.data;
     } catch (err: any) {
       const result: string | string[] = err.response.data.errors;
@@ -14,4 +14,4 @@ const getUserSections = createAsyncThunk(
   }
 );
 
-export default getUserSections;
+export default getUserContacts;
