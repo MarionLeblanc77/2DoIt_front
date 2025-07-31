@@ -2,7 +2,7 @@ import { ChangeEvent, useId } from "react";
 import "./Field.scss";
 
 interface FieldProps {
-  fieldDisplayedName: string;
+  fieldDisplayedName?: string;
   instructions?: string;
   value: string;
   type: string;

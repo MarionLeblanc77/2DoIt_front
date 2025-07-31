@@ -35,19 +35,6 @@
   }
 }
 
-.editable-element:hover {
-  background-color: rgba(0, 0, 0, 0.1);
-  & .delete-icon {
-    display: block;
-  }
-}
-
-.delete-icon {
-  display: none;
-  margin-right: 0.3rem;
-  cursor: pointer;
-}
-
 .input {
   width: 100%;
   border: none;

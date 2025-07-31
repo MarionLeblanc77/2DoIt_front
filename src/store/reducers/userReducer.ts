@@ -3,6 +3,8 @@ import { IUser } from "../../@types/user";
 import login from "../middlewares/login";
 import register from "../middlewares/register";
 import getUserContacts from "../middlewares/getUserContacts";
+import addContact from "../middlewares/addContact";
+import deleteContact from "../middlewares/deleteContact";
 
 interface IUserState {
   logged: boolean;
@@ -65,6 +67,28 @@ const userReducer = createReducer(userInitialState, (builder) => {
     })
     .addCase(getUserContacts.rejected, () => {
       console.log("Action getUserContacts rejected");
+    })
+    .addCase(addContact.fulfilled, (state, action) => {
+      console.log("Action addContact fullfilled");
+      state.connectedUser.contacts = action.payload.userContacts;
+    })
+    .addCase(addContact.pending, () => {
+      console.log("Action addContact pending");
+    })
+    .addCase(addContact.rejected, () => {
+      console.log("Action addContact rejected");
+    })
+    .addCase(deleteContact.fulfilled, (state, action) => {
+      state.connectedUser.contacts = state.connectedUser.contacts.filter(
+        (contact) => contact.id !== action.payload.id
+      );
+      console.log("Action deleteContact fullfilled");
+    })
+    .addCase(deleteContact.pending, () => {
+      console.log("Action deleteContact pending");
+    })
+    .addCase(deleteContact.rejected, () => {
+      console.log("Action deleteContact rejected");
     })
     .addCase(actionLogout, (state) => {
       state.logged = false;
