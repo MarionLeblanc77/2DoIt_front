@@ -31,13 +31,20 @@
 
 .editable-element:hover {
   background-color: rgba(0, 0, 0, 0.1);
-  & .delete-icon {
+  & .delete-icon,
+  & .users-icon {
     display: block;
   }
 }
 
-.delete-icon {
+.delete-icon,
+.users-icon {
+  flex-shrink: 0;
   display: none;
   margin-right: 0.3rem;
   cursor: pointer;
+}
+
+li {
+  list-style: none;
 }

@@ -1,0 +1,24 @@
+.user-icon {
+  border-radius: 50%;
+  height: 1.5rem;
+  width: 1.5rem;
+  &:hover {
+    cursor: pointer;
+    opacity: 0.5;
+    & .user-icon-delete {
+      display: block;
+    }
+  }
+  &-delete {
+    display: none;
+  }
+  &-initials {
+    line-height: 1.5rem;
+    font-size: 0.7em;
+    text-align: center;
+    vertical-align: middle;
+    font-weight: 600;
+    color: white;
+  }
+}
+

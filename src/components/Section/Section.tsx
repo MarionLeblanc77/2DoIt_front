@@ -1,19 +1,15 @@
 import { ChangeEvent, useState } from "react";
-import { CheckSquare, Square, Trash2 } from "react-feather";
+import { Square, Trash2 } from "react-feather";
 import DOMPurify from "dompurify";
 import "./Section.scss";
 import type { ISection } from "../../@types/task";
 import { useAppDispatch } from "../../store/hooks-redux";
-import {
-  actionChangeSectionStateInfo,
-  actionChangeTaskStateInfo,
-} from "../../store/reducers/taskReducer";
-import updateTask from "../../store/middlewares/updateTask";
+import { actionChangeSectionStateInfo } from "../../store/reducers/taskReducer";
 import addTask from "../../store/middlewares/addTask";
-import deleteTask from "../../store/middlewares/deleteTask";
 import updateSection from "../../store/middlewares/updateSection";
 import deleteSection from "../../store/middlewares/deleteSection";
 import addSection from "../../store/middlewares/addSection";
+import Task from "../Task/Task";
 
 export default function Section({
   id,
@@ -25,18 +21,6 @@ export default function Section({
 
   const [newTaskContent, setNewTaskContent] = useState<string>("");
 
-  const handleChangeTaskContent =
-    (taskId?: number) => (event: ChangeEvent<HTMLInputElement>) => {
-      dispatch(
-        actionChangeTaskStateInfo({
-          sectionId: id,
-          taskId,
-          fieldName: "content",
-          newValue: DOMPurify.sanitize(event.target.value),
-        })
-      );
-    };
-
   const handleChangeSectionTitle =
     () => (event: ChangeEvent<HTMLInputElement>) => {
       dispatch(
@@ -47,18 +31,6 @@ export default function Section({
         })
       );
     };
-
-  const handleSubmitContent = (taskId: number) => () => {
-    const updatedTask = tasks.find((task) => task.id === taskId);
-    if (updatedTask) {
-      dispatch(
-        updateTask({
-          id: taskId,
-          content: updatedTask.content,
-        })
-      );
-    }
-  };
 
   const handleSubmitTitle = () => () => {
     if (id === 0) {
@@ -102,25 +74,7 @@ export default function Section({
       </h2>
       <ul className="section-tasks">
         {tasks.map((task) => (
-          <li className="section-task editable-element" key={task.id}>
-            {task.active ? (
-              <Square size="1.2rem" />
-            ) : (
-              <CheckSquare size="1.2rem" />
-            )}
-            <input
-              className="section-task-input input"
-              type="text"
-              value={task.content}
-              onChange={handleChangeTaskContent(task.id)}
-              onBlur={handleSubmitContent(task.id)}
-            />
-            <Trash2
-              className="delete-icon"
-              size="1.2rem"
-              onClick={() => dispatch(deleteTask({ id: task.id }))}
-            />
-          </li>
+          <Task key={task.id} task={task} sectionId={id} />
         ))}
         <li className="section-task section-task-add">
           <Square size="1.2rem" />

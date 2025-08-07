@@ -1,12 +1,12 @@
 import "./Login.scss";
-import { useAppSelector } from "../../../store/hooks-redux";
-import Field from "../../Field/Field";
+import { useAppSelector } from "../../store/hooks-redux";
+import Field from "../Field/Field";
 
 interface LoginProps {
   changeField: (value: string, name: "email" | "password") => void;
 }
 
-function Login({ changeField }: LoginProps) {
+export default function Login({ changeField }: LoginProps) {
   const email = useAppSelector(
     (state) => state.userReducer.connectedUser.email
   );
@@ -39,5 +39,3 @@ function Login({ changeField }: LoginProps) {
     </div>
   );
 }
-
-export default Login;

@@ -3,7 +3,7 @@ import DOMPurify from "dompurify";
 import { Trash2 } from "react-feather";
 import { useAppDispatch, useAppSelector } from "../../store/hooks-redux";
 import "./Settings.scss";
-import Field from "../Field/Field";
+import Field from "../../components/Field/Field";
 import addContact from "../../store/middlewares/addContact";
 
 import deleteContact from "../../store/middlewares/deleteContact";
@@ -55,7 +55,7 @@ function Settings() {
         </form>
 
         <ul className="settings-contacts-list">
-          {userContacts.map((contact) => (
+          {userContacts?.map((contact) => (
             <li
               key={contact.id}
               className="settings-contacts-item editable-element"

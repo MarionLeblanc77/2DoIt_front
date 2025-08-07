@@ -6,7 +6,7 @@ import "./App.scss";
 import Home from "./Home/Home";
 import Dashboard from "./Dashboard/Dashboard";
 import Settings from "./Settings/Settings";
-import Header from "./Header/Header";
+import Header from "../components/Header/Header";
 import getUserSections from "../store/middlewares/getUserSections";
 import getUserContacts from "../store/middlewares/getUserContacts";
 import Error from "./Error/Error";

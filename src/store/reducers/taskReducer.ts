@@ -8,6 +8,7 @@ import deleteTask from "../middlewares/deleteTask";
 import updateSection from "../middlewares/updateSection";
 import deleteSection from "../middlewares/deleteSection";
 import addSection from "../middlewares/addSection";
+import deleteContactFromTask from "../middlewares/deleteContactFromTask";
 
 interface ITaskState {
   sections: ISection[];
@@ -139,18 +140,14 @@ const taskReducer = createReducer(taskInitialState, (builder) => {
       console.log("Action addSection rejected");
     })
     .addCase(deleteTask.fulfilled, (state, action) => {
-      const toUpdateSection = state.sections.find((section) =>
+      const sectionToUpdate = state.sections.find((section) =>
         section.tasks.find((task) => task.id === action.payload.id)
       );
-      toUpdateSection!.tasks = toUpdateSection!.tasks.filter(
-        (task) => task.id !== action.payload.id
-      );
-      state.sections = state.sections.map((section) => {
-        if (section.id === toUpdateSection!.id) {
-          return toUpdateSection!;
-        }
-        return section;
-      });
+      if (sectionToUpdate) {
+        sectionToUpdate!.tasks = sectionToUpdate!.tasks.filter(
+          (task) => task.id !== action.payload.id
+        );
+      }
       console.log("Action deleteTask fullfilled");
     })
     .addCase(deleteTask.pending, () => {
@@ -170,6 +167,30 @@ const taskReducer = createReducer(taskInitialState, (builder) => {
     })
     .addCase(deleteSection.rejected, () => {
       console.log("Action deleteSection rejected");
+    })
+    .addCase(deleteContactFromTask.fulfilled, (state, action) => {
+      const sectionToUpdate = state.sections.find((section) =>
+        section.tasks.find((task) => task.id === action.payload.ids.taskId)
+      );
+
+      if (sectionToUpdate) {
+        const taskToUpdate = sectionToUpdate.tasks.find(
+          (task) => task.id === action.payload.ids.taskId
+        );
+
+        if (taskToUpdate) {
+          taskToUpdate.users = taskToUpdate.users.filter(
+            (user) => user.id !== action.payload.ids.userId
+          );
+        }
+      }
+      console.log("Action deleteContactFromTask fullfilled");
+    })
+    .addCase(deleteContactFromTask.pending, () => {
+      console.log("Action deleteContactFromTask pending");
+    })
+    .addCase(deleteContactFromTask.rejected, () => {
+      console.log("Action deleteContactFromTask rejected");
     });
 });
 

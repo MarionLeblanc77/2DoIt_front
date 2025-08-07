@@ -1,3 +1,5 @@
+import { IUser } from "./user";
+
 export interface ISection {
   id: number;
   title: string;
@@ -8,6 +10,6 @@ export interface ISection {
 export interface ITask {
   id: number;
   content: string;
-  users: number[];
+  users: IUser[];
   active: boolean;
 }

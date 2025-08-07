@@ -1,6 +1,6 @@
 import "./Register.scss";
-import { useAppSelector } from "../../../store/hooks-redux";
-import Field from "../../Field/Field";
+import { useAppSelector } from "../../store/hooks-redux";
+import Field from "../Field/Field";
 
 interface RegisterProps {
   changeField: (
@@ -9,7 +9,7 @@ interface RegisterProps {
   ) => void;
 }
 
-function Register({ changeField }: RegisterProps) {
+export default function Register({ changeField }: RegisterProps) {
   const firstName = useAppSelector(
     (state) => state.userReducer.connectedUser.firstName
   );
@@ -67,5 +67,3 @@ function Register({ changeField }: RegisterProps) {
     </div>
   );
 }
-
-export default Register;

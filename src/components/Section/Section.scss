@@ -4,6 +4,8 @@
     margin-bottom: 0.5rem;
     display: flex;
     align-items: center;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
   &0 {
     color: lightgray;
@@ -12,11 +14,16 @@
     padding: 0 0.5rem;
   }
   &-task {
-    list-style: none;
     padding-left: 0.3rem;
     display: flex;
     align-items: center;
     gap: 0.3rem;
+
+    &-contacts {
+      display: flex;
+      gap: 0.2rem;
+      padding-left: 0;
+    }
 
     &-add {
       color: lightgray;
@@ -41,4 +48,11 @@
   outline: none;
   background-color: transparent;
   color: inherit;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.checkbox-icon {
+  cursor: pointer;
+  flex-shrink: 0;
 }

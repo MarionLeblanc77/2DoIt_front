@@ -1,7 +1,7 @@
 /* eslint-disable no-plusplus */
 import { useEffect, useMemo, useState } from "react";
 import "./Dashboard.scss";
-import Section from "../Section/Section";
+import Section from "../../components/Section/Section";
 import { ISection } from "../../@types/task";
 import getNbColumns from "../../utils/app";
 import { useAppSelector } from "../../store/hooks-redux";
@@ -9,7 +9,7 @@ import { useAppSelector } from "../../store/hooks-redux";
 export default function Dashboard() {
   const userSections = useAppSelector((state) => state.taskReducer.sections);
 
-  const [nbColumns, setNbColumns] = useState(getNbColumns());
+  const [nbColumns, setNbColumns] = useState<number>(getNbColumns);
 
   useEffect(() => {
     function handleResize() {

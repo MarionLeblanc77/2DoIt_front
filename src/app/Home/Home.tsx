@@ -2,8 +2,8 @@ import DOMPurify from "dompurify";
 import { useState, FormEvent } from "react";
 import { useAppDispatch } from "../../store/hooks-redux";
 import "./Home.scss";
-import Login from "./Login/Login";
-import Register from "./Register/Register";
+import Login from "../../components/Login/Login";
+import Register from "../../components/Register/Register";
 import { actionChangeUserStateInfo } from "../../store/reducers/userReducer";
 import login from "../../store/middlewares/login";
 import register from "../../store/middlewares/register";
@@ -56,7 +56,7 @@ function Home() {
       action: handleSubmitRegister,
     },
   ];
-  const [activeTab, setActiveTab] = useState(tabs[0].id);
+  const [activeTab, setActiveTab] = useState<number>(tabs[0].id);
 
   const handleTabClick = (tabId: number) => {
     setActiveTab(tabId);
