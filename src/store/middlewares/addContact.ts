@@ -13,7 +13,6 @@ const addContact = createAsyncThunk(
       const result = await axiosInstance.post(
         `/user/${payload.contactEmail}/contact`
       );
-      console.log("addContact result", result);
       return result.data;
     } catch (err: any) {
       const result: string | string[] = err.response.data.errors;

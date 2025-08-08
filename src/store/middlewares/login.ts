@@ -15,7 +15,7 @@ const login = createAsyncThunk(
       });
       addTokenToAxiosInstance(result.data.token);
 
-      const result2 = await axiosInstance.post("/login_check", {
+      await axiosInstance.post("/login_check", {
         email,
         password,
       });

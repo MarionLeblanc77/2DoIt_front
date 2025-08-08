@@ -53,21 +53,15 @@ const taskReducer = createReducer(taskInitialState, (builder) => {
       )![action.payload.fieldName] = action.payload.newValue;
     })
     .addCase(getUserSections.fulfilled, (state, action) => {
-      console.log("Action getUserSections fullfilled");
       if (state.sections.length === 1) {
         state.sections.unshift(...action.payload);
       } else if (state.sections.length > 1) {
         state.sections = action.payload.push(state.sections.slice(-1));
       }
     })
-    .addCase(getUserSections.pending, () => {
-      console.log("Action getUserSections pending");
-    })
-    .addCase(getUserSections.rejected, () => {
-      console.log("Action getUserSections rejected");
-    })
+    .addCase(getUserSections.pending, () => {})
+    .addCase(getUserSections.rejected, () => {})
     .addCase(updateTask.fulfilled, (state, action) => {
-      console.log("Action updateTask fullfilled");
       state.sections = state.sections.map((section) => {
         if (section.id === action.payload.sectionId) {
           section.tasks = section.tasks.map((task) => {
@@ -81,14 +75,9 @@ const taskReducer = createReducer(taskInitialState, (builder) => {
         return section;
       });
     })
-    .addCase(updateTask.pending, () => {
-      console.log("Action updateTask pending");
-    })
-    .addCase(updateTask.rejected, () => {
-      console.log("Action updateTask rejected");
-    })
+    .addCase(updateTask.pending, () => {})
+    .addCase(updateTask.rejected, () => {})
     .addCase(updateSection.fulfilled, (state, action) => {
-      console.log("Action updateSection fullfilled");
       state.sections = state.sections.map((section) => {
         if (section.id === action.payload.id) {
           section.title = action.payload.title;
@@ -97,12 +86,8 @@ const taskReducer = createReducer(taskInitialState, (builder) => {
         return section;
       });
     })
-    .addCase(updateSection.pending, () => {
-      console.log("Action updateSection pending");
-    })
-    .addCase(updateSection.rejected, () => {
-      console.log("Action updateSection rejected");
-    })
+    .addCase(updateSection.pending, () => {})
+    .addCase(updateSection.rejected, () => {})
     .addCase(addTask.fulfilled, (state, action) => {
       const toUpdateSectionId = action.payload.sectionId ?? 0;
 
@@ -113,15 +98,9 @@ const taskReducer = createReducer(taskInitialState, (builder) => {
         }
         return section;
       });
-
-      console.log("Action addTask fullfilled");
     })
-    .addCase(addTask.pending, () => {
-      console.log("Action addTask pending");
-    })
-    .addCase(addTask.rejected, () => {
-      console.log("Action addTask rejected");
-    })
+    .addCase(addTask.pending, () => {})
+    .addCase(addTask.rejected, () => {})
     .addCase(addSection.fulfilled, (state, action) => {
       state.sections.push(action.payload.result.section);
       state.sections = state.sections.map((section) => {
@@ -133,12 +112,8 @@ const taskReducer = createReducer(taskInitialState, (builder) => {
       });
       state.sections.push(state.sections.splice(-2, 1)[0]);
     })
-    .addCase(addSection.pending, () => {
-      console.log("Action addSection pending");
-    })
-    .addCase(addSection.rejected, () => {
-      console.log("Action addSection rejected");
-    })
+    .addCase(addSection.pending, () => {})
+    .addCase(addSection.rejected, () => {})
     .addCase(deleteTask.fulfilled, (state, action) => {
       const sectionToUpdate = state.sections.find((section) =>
         section.tasks.find((task) => task.id === action.payload.id)
@@ -148,26 +123,16 @@ const taskReducer = createReducer(taskInitialState, (builder) => {
           (task) => task.id !== action.payload.id
         );
       }
-      console.log("Action deleteTask fullfilled");
     })
-    .addCase(deleteTask.pending, () => {
-      console.log("Action deleteTask pending");
-    })
-    .addCase(deleteTask.rejected, () => {
-      console.log("Action deleteTask rejected");
-    })
+    .addCase(deleteTask.pending, () => {})
+    .addCase(deleteTask.rejected, () => {})
     .addCase(deleteSection.fulfilled, (state, action) => {
       state.sections = state.sections.filter(
         (section) => section.id !== action.payload.id
       );
-      console.log("Action deleteSection fullfilled");
     })
-    .addCase(deleteSection.pending, () => {
-      console.log("Action deleteSection pending");
-    })
-    .addCase(deleteSection.rejected, () => {
-      console.log("Action deleteSection rejected");
-    })
+    .addCase(deleteSection.pending, () => {})
+    .addCase(deleteSection.rejected, () => {})
     .addCase(deleteContactFromTask.fulfilled, (state, action) => {
       const sectionToUpdate = state.sections.find((section) =>
         section.tasks.find((task) => task.id === action.payload.ids.taskId)
@@ -184,14 +149,9 @@ const taskReducer = createReducer(taskInitialState, (builder) => {
           );
         }
       }
-      console.log("Action deleteContactFromTask fullfilled");
     })
-    .addCase(deleteContactFromTask.pending, () => {
-      console.log("Action deleteContactFromTask pending");
-    })
-    .addCase(deleteContactFromTask.rejected, () => {
-      console.log("Action deleteContactFromTask rejected");
-    });
+    .addCase(deleteContactFromTask.pending, () => {})
+    .addCase(deleteContactFromTask.rejected, () => {});
 });
 
 export default taskReducer;

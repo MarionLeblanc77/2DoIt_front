@@ -34,62 +34,36 @@ const userReducer = createReducer(userInitialState, (builder) => {
     .addCase(actionChangeUserStateInfo, (state, action) => {
       state.connectedUser[action.payload.fieldName] = action.payload.newValue;
     })
-    .addCase(register.fulfilled, () => {
-      console.log("Action register fullfilled");
-    })
-    .addCase(register.pending, () => {
-      console.log("Action register pending");
-    })
-    .addCase(register.rejected, () => {
-      console.log("Action register rejected");
-    })
+    .addCase(register.fulfilled, () => {})
+    .addCase(register.pending, () => {})
+    .addCase(register.rejected, () => {})
     .addCase(login.fulfilled, (state, action) => {
-      console.log("Action login fullfilled");
       state.connectedUser.id = action.payload.id;
       state.connectedUser.email = action.payload.email;
-      state.connectedUser.firstName = action.payload.first_name;
-      state.connectedUser.lastName = action.payload.last_name;
+      state.connectedUser.firstName = action.payload.firstName;
+      state.connectedUser.lastName = action.payload.lastName;
       state.connectedUser.password = "";
       state.logged = true;
     })
-    .addCase(login.pending, () => {
-      console.log("Action login pending");
-    })
-    .addCase(login.rejected, () => {
-      console.log("Action login rejected");
-    })
+    .addCase(login.pending, () => {})
+    .addCase(login.rejected, () => {})
     .addCase(getUserContacts.fulfilled, (state, action) => {
-      console.log("Action getUserContacts fullfilled");
       state.connectedUser.contacts = action.payload;
     })
-    .addCase(getUserContacts.pending, () => {
-      console.log("Action getUserContacts pending");
-    })
-    .addCase(getUserContacts.rejected, () => {
-      console.log("Action getUserContacts rejected");
-    })
+    .addCase(getUserContacts.pending, () => {})
+    .addCase(getUserContacts.rejected, () => {})
     .addCase(addContact.fulfilled, (state, action) => {
-      console.log("Action addContact fullfilled");
       state.connectedUser.contacts = action.payload.userContacts;
     })
-    .addCase(addContact.pending, () => {
-      console.log("Action addContact pending");
-    })
-    .addCase(addContact.rejected, () => {
-      console.log("Action addContact rejected");
-    })
+    .addCase(addContact.pending, () => {})
+    .addCase(addContact.rejected, () => {})
     .addCase(deleteContact.fulfilled, (state, action) => {
       state.connectedUser.contacts = state.connectedUser.contacts.filter(
         (contact) => contact.id !== action.payload.id
       );
-      console.log("Action deleteContact fullfilled");
     })
-    .addCase(deleteContact.pending, () => {
-      console.log("Action deleteContact pending");
-    })
-    .addCase(deleteContact.rejected, () => {
-      console.log("Action deleteContact rejected");
-    })
+    .addCase(deleteContact.pending, () => {})
+    .addCase(deleteContact.rejected, () => {})
     .addCase(actionLogout, (state) => {
       state.logged = false;
       state.connectedUser.id = 0;

@@ -1,0 +1,21 @@
+.add-contact-modal {
+  position: fixed;
+  padding: 2rem 2rem 2rem 0.3rem;
+  margin-top: -2.2rem;
+  border-radius: 8px;
+
+  &-container {
+    background-color: white;
+    border-radius: 0 8px 8px 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    padding: 0.3rem;
+  }
+
+  &-item {
+    line-height: 1.3rem;
+    display: flex;
+    direction: row;
+    text-wrap: nowrap;
+  }
+}
+

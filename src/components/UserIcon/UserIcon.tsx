@@ -22,7 +22,6 @@ export default function UserIcon({
 
   const backgroundColor = stringToColor(`${firstName}${lastName}`);
 
-  console.log(id, firstName, lastName, taskId);
   const handleClickDeleteUser = () => {
     dispatch(deleteContactFromTask({ taskId, userId: id }));
   };

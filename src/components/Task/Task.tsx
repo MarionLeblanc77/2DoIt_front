@@ -1,4 +1,4 @@
-import { ChangeEvent } from "react";
+import { ChangeEvent, useRef, useState } from "react";
 import { CheckSquare, Square, Trash2, Users } from "react-feather";
 import DOMPurify from "dompurify";
 import { ITask } from "../../@types/task";
@@ -7,6 +7,8 @@ import { useAppDispatch } from "../../store/hooks-redux";
 import { actionChangeTaskStateInfo } from "../../store/reducers/taskReducer";
 import updateTask from "../../store/middlewares/updateTask";
 import deleteTask from "../../store/middlewares/deleteTask";
+import AddContactModal from "../AddContactModal/AddContactModal";
+import { i } from "vite/dist/node/types.d-aGj9QkWt";
 
 interface TaskProps {
   task: ITask;
@@ -14,7 +16,7 @@ interface TaskProps {
 }
 
 export default function Task({ task, sectionId }: TaskProps) {
-  console.log("Task component rendered", task);
+  const [isAddContactModalOpen, setIsAddContactModalOpen] = useState(false);
   const dispatch = useAppDispatch();
 
   const handleChangeTaskContent =
@@ -40,8 +42,20 @@ export default function Task({ task, sectionId }: TaskProps) {
 
   const contacts = task.users?.slice(1);
 
+  const userIconRef = useRef<HTMLElement>(null);
+
+  const unsetAddContactModalIfOpen = () => {
+    if (isAddContactModalOpen) {
+      setIsAddContactModalOpen(false);
+    }
+  };
+
   return (
-    <li className="section-task editable-element">
+    <li
+      className="section-task editable-element"
+      onBlur={unsetAddContactModalIfOpen}
+      onMouseLeave={unsetAddContactModalIfOpen}
+    >
       {task.active ? (
         <Square size="1.2rem" className="checkbox-icon" />
       ) : (
@@ -54,7 +68,7 @@ export default function Task({ task, sectionId }: TaskProps) {
         onChange={handleChangeTaskContent(task.id)}
         onBlur={handleSubmitContent(task.id)}
       />
-      {contacts.length > 1 && (
+      {contacts.length > 0 && (
         <ul className="section-task-contacts">
           {contacts.map((user) => (
             <li key={user.id} className="section-task-contact">
@@ -68,7 +82,18 @@ export default function Task({ task, sectionId }: TaskProps) {
           ))}
         </ul>
       )}
-      <Users className="users-icon" size="1.2rem" />
+      <span ref={userIconRef} className="users-icon-container">
+        <Users
+          className="users-icon"
+          size="1.2rem"
+          onClick={() => setIsAddContactModalOpen(!isAddContactModalOpen)}
+        />
+      </span>
+      {isAddContactModalOpen && userIconRef.current && (
+        <AddContactModal
+          position={userIconRef.current.getBoundingClientRect()}
+        />
+      )}
       <Trash2
         className="delete-icon"
         size="1.2rem"
