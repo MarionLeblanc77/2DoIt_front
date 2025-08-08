@@ -8,7 +8,6 @@ import { actionChangeTaskStateInfo } from "../../store/reducers/taskReducer";
 import updateTask from "../../store/middlewares/updateTask";
 import deleteTask from "../../store/middlewares/deleteTask";
 import AddContactModal from "../AddContactModal/AddContactModal";
-import { i } from "vite/dist/node/types.d-aGj9QkWt";
 
 interface TaskProps {
   task: ITask;
@@ -92,6 +91,7 @@ export default function Task({ task, sectionId }: TaskProps) {
       {isAddContactModalOpen && userIconRef.current && (
         <AddContactModal
           position={userIconRef.current.getBoundingClientRect()}
+          taskId={task.id}
         />
       )}
       <Trash2

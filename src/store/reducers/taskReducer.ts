@@ -9,6 +9,7 @@ import updateSection from "../middlewares/updateSection";
 import deleteSection from "../middlewares/deleteSection";
 import addSection from "../middlewares/addSection";
 import deleteContactFromTask from "../middlewares/deleteContactFromTask";
+import addContactToTask from "../middlewares/addContactToTask";
 
 interface ITaskState {
   sections: ISection[];
@@ -133,6 +134,23 @@ const taskReducer = createReducer(taskInitialState, (builder) => {
     })
     .addCase(deleteSection.pending, () => {})
     .addCase(deleteSection.rejected, () => {})
+    .addCase(addContactToTask.fulfilled, (state, action) => {
+      const sectionToUpdate = state.sections.find((section) =>
+        section.tasks.find((task) => task.id === action.payload.taskId)
+      );
+
+      if (sectionToUpdate) {
+        const taskToUpdate = sectionToUpdate.tasks.find(
+          (task) => task.id === action.payload.taskId
+        );
+
+        if (taskToUpdate) {
+          taskToUpdate.users.push(action.payload.user!);
+        }
+      }
+    })
+    .addCase(addContactToTask.pending, () => {})
+    .addCase(addContactToTask.rejected, () => {})
     .addCase(deleteContactFromTask.fulfilled, (state, action) => {
       const sectionToUpdate = state.sections.find((section) =>
         section.tasks.find((task) => task.id === action.payload.ids.taskId)

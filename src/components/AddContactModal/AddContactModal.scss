@@ -13,9 +13,17 @@
 
   &-item {
     line-height: 1.3rem;
-    display: flex;
-    direction: row;
-    text-wrap: nowrap;
+    &:hover {
+      background-color: rgba(0, 0, 0, 0.1);
+    }
+    &-name {
+      background: none;
+      border: none;
+      padding: 0;
+      width: 100%;
+      text-align: left;
+      cursor: pointer;
+    }
   }
 }
 

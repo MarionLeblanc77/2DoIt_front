@@ -3,6 +3,7 @@ import stringToColor from "../../utils/stringToColor";
 import "./UserIcon.scss";
 import { useAppDispatch } from "../../store/hooks-redux";
 import deleteContactFromTask from "../../store/middlewares/deleteContactFromTask";
+import handleKeyDown from "../../utils/accessibility";
 
 interface UserIconProps {
   id: number;
@@ -26,13 +27,6 @@ export default function UserIcon({
     dispatch(deleteContactFromTask({ taskId, userId: id }));
   };
 
-  const handleKeyDown = (event: React.KeyboardEvent) => {
-    if (event.key === "Enter" || event.key === " ") {
-      event.preventDefault();
-      handleClickDeleteUser();
-    }
-  };
-
   return (
     <div
       role="button"
@@ -41,7 +35,7 @@ export default function UserIcon({
       tabIndex={0}
       aria-label={`Remove ${firstName} ${lastName}`}
       onClick={handleClickDeleteUser}
-      onKeyDown={handleKeyDown}
+      onKeyDown={(event) => handleKeyDown(event, handleClickDeleteUser)}
     >
       <X className="user-icon-delete" color="white" aria-hidden="true" />
       <p className="user-icon-initials">{initials}</p>

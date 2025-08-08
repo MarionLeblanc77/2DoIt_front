@@ -7,7 +7,7 @@ interface Props {
 }
 
 const deleteContact = createAsyncThunk(
-  "contact/DELETE_CONTACT",
+  "user/DELETE_CONTACT",
   async (payload: Props, thunkAPI) => {
     try {
       const result = await axiosInstance.delete(`/user/${payload.id}/contacts`);
