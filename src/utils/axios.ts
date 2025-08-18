@@ -3,7 +3,9 @@ import axios from "axios";
 import toCamelCase from "./caseConvertor";
 
 export const axiosInstance = axios.create({
-  baseURL: "http://127.0.0.1:8000/api",
+  baseURL:
+    `${import.meta.env.VITE_BACKEND_ENDPOINT}/api` ||
+    "http://127.0.0.1:8000/api",
 });
 
 export const addTokenToAxiosInstance = (token: string) => {
