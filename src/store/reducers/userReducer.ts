@@ -58,7 +58,7 @@ const userReducer = createReducer(userInitialState, (builder) => {
     .addCase(addContact.pending, () => {})
     .addCase(addContact.rejected, () => {})
     .addCase(deleteContact.fulfilled, (state, action) => {
-      state.connectedUser.contacts = state.connectedUser.contacts.filter(
+      state.connectedUser.contacts = state.connectedUser.contacts?.filter(
         (contact) => contact.id !== action.payload.id
       );
     })
