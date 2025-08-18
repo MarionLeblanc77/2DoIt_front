@@ -8,6 +8,7 @@ import { actionChangeTaskStateInfo } from "../../store/reducers/taskReducer";
 import updateTask from "../../store/middlewares/updateTask";
 import deleteTask from "../../store/middlewares/deleteTask";
 import AddContactModal from "../AddContactModal/AddContactModal";
+import toggleActive from "../../store/middlewares/toggleActive";
 
 interface TaskProps {
   task: ITask;
@@ -56,16 +57,26 @@ export default function Task({ task, sectionId }: TaskProps) {
       onMouseLeave={unsetAddContactModalIfOpen}
     >
       {task.active ? (
-        <Square size="1.2rem" className="checkbox-icon" />
+        <Square
+          size="1.2rem"
+          className="checkbox-icon"
+          onClick={() => dispatch(toggleActive({ id: task.id, sectionId }))}
+        />
       ) : (
-        <CheckSquare size="1.2rem" className="checkbox-icon" />
+        <CheckSquare
+          size="1.2rem"
+          className="checkbox-icon"
+          onClick={() => dispatch(toggleActive({ id: task.id, sectionId }))}
+        />
       )}
+
       <input
         className="section-task-input input"
         type="text"
         value={task.content}
         onChange={handleChangeTaskContent(task.id)}
         onBlur={handleSubmitContent(task.id)}
+        style={!task.active ? { textDecoration: "line-through" } : {}}
       />
       {contacts.length > 0 && (
         <ul className="section-task-contacts">

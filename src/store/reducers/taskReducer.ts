@@ -10,6 +10,7 @@ import deleteSection from "../middlewares/deleteSection";
 import addSection from "../middlewares/addSection";
 import deleteContactFromTask from "../middlewares/deleteContactFromTask";
 import addContactToTask from "../middlewares/addContactToTask";
+import toggleActive from "../middlewares/toggleActive";
 
 interface ITaskState {
   sections: ISection[];
@@ -78,6 +79,22 @@ const taskReducer = createReducer(taskInitialState, (builder) => {
     })
     .addCase(updateTask.pending, () => {})
     .addCase(updateTask.rejected, () => {})
+    .addCase(toggleActive.fulfilled, (state, action) => {
+      state.sections = state.sections.map((section) => {
+        if (section.id === action.payload.sectionId) {
+          section.tasks = section.tasks.map((task) => {
+            if (task.id === action.payload.data.task.id) {
+              return { ...task, active: action.payload.data.task.active };
+            }
+            return task;
+          });
+          return section;
+        }
+        return section;
+      });
+    })
+    .addCase(toggleActive.pending, () => {})
+    .addCase(toggleActive.rejected, () => {})
     .addCase(updateSection.fulfilled, (state, action) => {
       state.sections = state.sections.map((section) => {
         if (section.id === action.payload.id) {
