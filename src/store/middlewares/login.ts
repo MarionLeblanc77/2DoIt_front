@@ -13,7 +13,7 @@ const login = createAsyncThunk(
       axiosInstance.defaults
     );
     console.log("axiosInstance headers", axiosInstance.defaults.headers.common);
-    console.log('env"', import.meta.env.APP_ENV);
+    console.log('env"', import.meta.env.VITE_APP_ENV);
     const state = thunkAPI.getState() as RootState;
     const { email, password } = state.userReducer.connectedUser;
     try {
