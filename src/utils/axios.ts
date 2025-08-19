@@ -6,7 +6,7 @@ export const axiosInstance = axios.create({
   baseURL:
     `${import.meta.env.VITE_BACKEND_ENDPOINT}/api` ||
     "http://127.0.0.1:8000/api",
-  withCredentials: import.meta.env.APP_ENV === "prod",
+  withCredentials: import.meta.env.VITE_APP_ENV === "prod",
 });
 
 export const addTokenToAxiosInstance = (token: string) => {
