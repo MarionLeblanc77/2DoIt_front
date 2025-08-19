@@ -6,6 +6,7 @@ const login = createAsyncThunk(
   "user/LOGIN",
 
   async (_, thunkAPI) => {
+    console.log("axiosInstance", axiosInstance);
     const state = thunkAPI.getState() as RootState;
     const { email, password } = state.userReducer.connectedUser;
     try {
