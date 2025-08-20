@@ -15,11 +15,14 @@
     "resolveJsonModule": true,
     "isolatedModules": true,
     "noEmit": true,
-    "jsx": "react-jsx"
+    "jsx": "react-jsx",
+    "typeRoots": ["./node_modules/@types", "./src/types"]
   },
   "include": [
     ".eslintrc.cjs",
-    "src"
+    "src",
+    "src/**/*",
+    "src/types/**/*"
   ],
   "references": [
     // {

@@ -1,11 +1,15 @@
-// LOCAL
 import axios from "axios";
 import toCamelCase from "./caseConvertor";
 
+const getBackendEndpoint = (): string => {
+  if (typeof window !== "undefined" && window.APP_CONFIG) {
+    return window.APP_CONFIG.BACKEND_ENDPOINT;
+  }
+  return "http://127.0.0.1:8000";
+};
+
 export const axiosInstance = axios.create({
-  baseURL:
-    `${import.meta.env.VITE_BACKEND_ENDPOINT}/api` ||
-    "http://127.0.0.1:8000/api",
+  baseURL: `${getBackendEndpoint()}/api`,
   withCredentials: import.meta.env.VITE_APP_ENV === "prod",
 });
 

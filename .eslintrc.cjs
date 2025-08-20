@@ -12,6 +12,7 @@ module.exports = {
     // "plugin:@typescript-eslint/stylistic-type-checked",
     "plugin:prettier/recommended", // must be the last one
   ],
+  ignorePatterns: ["public/config.js"],
   parser: "@typescript-eslint/parser",
   parserOptions: {
     ecmaFeatures: {
