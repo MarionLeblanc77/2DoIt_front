@@ -10,7 +10,7 @@ const getBackendEndpoint = (): string => {
 
 export const axiosInstance = axios.create({
   baseURL: `${getBackendEndpoint()}/api`,
-  withCredentials: import.meta.env.VITE_APP_ENV === "prod",
+  withCredentials: window.APP_CONFIG.APP_ENV === "prod",
 });
 
 export const addTokenToAxiosInstance = (token: string) => {
