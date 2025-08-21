@@ -3,6 +3,7 @@ import { Home, Power, Settings } from "react-feather";
 import "./Header.scss";
 import { useAppDispatch, useAppSelector } from "../../store/hooks-redux";
 import { actionLogout } from "../../store/reducers/userReducer";
+import { actionResetTaskState } from "../../store/reducers/taskReducer";
 
 export default function Header() {
   const navigate = useNavigate();
@@ -18,6 +19,7 @@ export default function Header() {
   };
   const handleClickLogout = () => {
     dispatch(actionLogout());
+    dispatch(actionResetTaskState());
     navigate("/");
   };
   const handleClickDashboard = () => {

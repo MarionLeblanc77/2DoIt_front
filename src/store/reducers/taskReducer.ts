@@ -38,6 +38,7 @@ export const actionChangeSectionStateInfo = createAction<{
   newValue: string;
   fieldName: "title";
 }>("task/CHANGE_SECTIONINFO");
+export const actionResetTaskState = createAction("task/RESET");
 
 const taskReducer = createReducer(taskInitialState, (builder) => {
   builder
@@ -185,7 +186,17 @@ const taskReducer = createReducer(taskInitialState, (builder) => {
       }
     })
     .addCase(deleteContactFromTask.pending, () => {})
-    .addCase(deleteContactFromTask.rejected, () => {});
+    .addCase(deleteContactFromTask.rejected, () => {})
+    .addCase(actionResetTaskState, (state) => {
+      state.sections = [
+        {
+          id: 0,
+          title: "",
+          tasks: [],
+          lastUpdatedDate: "",
+        },
+      ];
+    });
 });
 
 export default taskReducer;
