@@ -1,15 +1,19 @@
 import DOMPurify from "dompurify";
 import { useState, FormEvent } from "react";
-import { useAppDispatch } from "../../store/hooks-redux";
+import { useAppDispatch, useAppSelector } from "../../store/hooks-redux";
 import "./Home.scss";
 import Login from "../../components/Login/Login";
 import Register from "../../components/Register/Register";
-import { actionChangeUserStateInfo } from "../../store/reducers/userReducer";
+import {
+  actionChangeUserStateInfo,
+  actionEmptyMessages,
+} from "../../store/reducers/userReducer";
 import login from "../../store/middlewares/login";
 import register from "../../store/middlewares/register";
 
 function Home() {
   const dispatch = useAppDispatch();
+  const messages = useAppSelector((state) => state.userReducer.messages);
 
   const changeUserField = (
     value: string,
@@ -59,6 +63,7 @@ function Home() {
   const [activeTab, setActiveTab] = useState<number>(tabs[0].id);
 
   const handleTabClick = (tabId: number) => {
+    dispatch(actionEmptyMessages());
     setActiveTab(tabId);
   };
 
@@ -94,6 +99,19 @@ function Home() {
                   <span aria-label="required"> *</span>
                 </p>
                 {tab.content.fields}
+                {messages.length > 0 && (
+                  <ul className="tab-panel-messages">
+                    {messages.map((msg) => (
+                      <li
+                        className="tab-panel-message"
+                        aria-live="assertive"
+                        key={msg}
+                      >
+                        {msg}
+                      </li>
+                    ))}
+                  </ul>
+                )}
                 <button
                   className="tab-panel-button button-volume"
                   type="submit"

@@ -9,6 +9,7 @@ import deleteContact from "../middlewares/deleteContact";
 interface IUserState {
   logged: boolean;
   connectedUser: IUser;
+  messages: string[];
 }
 
 export const userInitialState: IUserState = {
@@ -21,12 +22,13 @@ export const userInitialState: IUserState = {
     lastName: "",
     contacts: [],
   },
+  messages: [],
 };
 export const actionChangeUserStateInfo = createAction<{
   newValue: string;
   fieldName: "lastName" | "firstName" | "email" | "password";
 }>("user/CHANGE_USERINFO");
-
+export const actionEmptyMessages = createAction("user/EMPTY_MESSAGES");
 export const actionLogout = createAction("user/LOGOUT");
 
 const userReducer = createReducer(userInitialState, (builder) => {
@@ -34,9 +36,21 @@ const userReducer = createReducer(userInitialState, (builder) => {
     .addCase(actionChangeUserStateInfo, (state, action) => {
       state.connectedUser[action.payload.fieldName] = action.payload.newValue;
     })
+    .addCase(actionEmptyMessages, (state) => {
+      state.messages = [];
+    })
     .addCase(register.fulfilled, () => {})
-    .addCase(register.pending, () => {})
-    .addCase(register.rejected, () => {})
+    .addCase(register.pending, (state) => {
+      state.messages = [];
+    })
+    .addCase(register.rejected, (state, action) => {
+      console.log("Register error:", action.payload);
+      if (typeof action.payload === "string") {
+        state.messages.push(action.payload);
+      } else {
+        state.messages.push(...(action.payload as string[]));
+      }
+    })
     .addCase(login.fulfilled, (state, action) => {
       state.connectedUser.id = action.payload.id;
       state.connectedUser.email = action.payload.email;
@@ -45,8 +59,12 @@ const userReducer = createReducer(userInitialState, (builder) => {
       state.connectedUser.password = "";
       state.logged = true;
     })
-    .addCase(login.pending, () => {})
-    .addCase(login.rejected, () => {})
+    .addCase(login.pending, (state) => {
+      state.messages = [];
+    })
+    .addCase(login.rejected, (state, action) => {
+      state.messages.push(action.payload as string);
+    })
     .addCase(getUserContacts.fulfilled, (state, action) => {
       state.connectedUser.contacts = action.payload;
     })

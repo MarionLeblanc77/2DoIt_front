@@ -4,6 +4,7 @@ import "./Field.scss";
 interface FieldProps {
   fieldDisplayedName?: string;
   instructions?: string;
+  autocomplete?: string;
   value: string;
   type: string;
   placeholder: string;
@@ -14,6 +15,7 @@ interface FieldProps {
 function Field({
   fieldDisplayedName,
   instructions,
+  autocomplete = "off",
   value,
   type,
   placeholder,
@@ -38,6 +40,7 @@ function Field({
           id={inputId}
           className="field__inputcontainer--input"
           type={type}
+          autoComplete={autocomplete}
           value={value}
           onChange={handleChange}
           placeholder={placeholder}

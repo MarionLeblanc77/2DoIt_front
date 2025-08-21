@@ -6,14 +6,6 @@ const login = createAsyncThunk(
   "user/LOGIN",
 
   async (_, thunkAPI) => {
-    console.log(
-      "axiosInstance",
-      axiosInstance.options,
-      axiosInstance.request,
-      axiosInstance.defaults
-    );
-    console.log("axiosInstance headers", axiosInstance.defaults.headers.common);
-    console.log('env"', import.meta.env.VITE_APP_ENV);
     const state = thunkAPI.getState() as RootState;
     const { email, password } = state.userReducer.connectedUser;
     try {

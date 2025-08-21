@@ -1,4 +1,3 @@
-/* eslint-disable no-console */
 import { createAction, createReducer } from "@reduxjs/toolkit";
 import { ISection } from "../../@types/task";
 import getUserSections from "../middlewares/getUserSections";

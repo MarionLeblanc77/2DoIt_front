@@ -23,6 +23,7 @@ export default function Login({ changeField }: LoginProps) {
       <Field
         fieldDisplayedName="Email address"
         type="email"
+        autocomplete="email"
         placeholder="Your account email address"
         onChange={handleChangeField("email")}
         value={email}
@@ -31,6 +32,7 @@ export default function Login({ changeField }: LoginProps) {
       <Field
         fieldDisplayedName="Password"
         type="password"
+        autocomplete="current-password"
         placeholder="Your password"
         onChange={handleChangeField("password")}
         value={password}
