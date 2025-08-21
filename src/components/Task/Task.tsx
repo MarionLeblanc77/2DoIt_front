@@ -76,6 +76,12 @@ export default function Task({ task, sectionId }: TaskProps) {
         value={task.content}
         onChange={handleChangeTaskContent(task.id)}
         onBlur={handleSubmitContent(task.id)}
+        onKeyUp={(e) => {
+          if (e.key === "Enter") {
+            handleSubmitContent(task.id)();
+            e.currentTarget.blur();
+          }
+        }}
         style={!task.active ? { textDecoration: "line-through" } : {}}
       />
       {contacts.length > 0 && (
@@ -113,4 +119,3 @@ export default function Task({ task, sectionId }: TaskProps) {
     </li>
   );
 }
-

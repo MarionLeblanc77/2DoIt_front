@@ -64,6 +64,12 @@ export default function Section({
           value={title}
           onChange={handleChangeSectionTitle()}
           onBlur={handleSubmitTitle()}
+          onKeyUp={(e) => {
+            if (e.key === "Enter") {
+              handleSubmitTitle()();
+              e.currentTarget.blur();
+            }
+          }}
           placeholder={id === 0 ? "Add a new task..." : ""}
         />
         <Trash2
@@ -84,6 +90,12 @@ export default function Section({
             value={newTaskContent}
             onChange={(e) => setNewTaskContent(e.target.value)}
             onBlur={handleAddTask()}
+            onKeyUp={(e) => {
+              if (e.key === "Enter") {
+                handleAddTask();
+                e.currentTarget.blur();
+              }
+            }}
             placeholder="Add a new task..."
           />
         </li>

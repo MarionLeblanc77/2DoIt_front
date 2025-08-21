@@ -6,6 +6,9 @@
     align-items: center;
     overflow: hidden;
     text-overflow: ellipsis;
+    :focus-within {
+      color: black;
+    }
   }
   &0 {
     color: lightgray;
