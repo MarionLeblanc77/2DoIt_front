@@ -70,7 +70,7 @@ export default function Section({
               e.currentTarget.blur();
             }
           }}
-          placeholder={id === 0 ? "Add a new task..." : ""}
+          placeholder={id === 0 ? "Add a new list..." : ""}
         />
         <Trash2
           className="delete-icon"
