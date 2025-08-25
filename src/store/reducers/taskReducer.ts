@@ -1,3 +1,4 @@
+/* eslint-disable no-plusplus */
 import { createAction, createReducer } from "@reduxjs/toolkit";
 import { ISection } from "../../@types/task";
 import getUserSections from "../middlewares/getUserSections";
@@ -21,6 +22,7 @@ export const taskInitialState: ITaskState = {
       id: 0,
       title: "",
       tasks: [],
+      position: 0,
       lastUpdatedDate: "",
     },
   ],
@@ -37,7 +39,14 @@ export const actionChangeSectionStateInfo = createAction<{
   sectionId: number;
   newValue: string;
   fieldName: "title";
-}>("task/CHANGE_SECTIONINFO");
+}>("task/CHANGE_SECTION_INFO");
+
+export const actionChangeSectionOrder = createAction<{
+  sectionId: number;
+  arrivalPosition: number;
+  initialPosition: number;
+}>("task/CHANGE_SECTION_ORDER");
+
 export const actionResetTaskState = createAction("task/RESET");
 
 const taskReducer = createReducer(taskInitialState, (builder) => {
@@ -54,11 +63,46 @@ const taskReducer = createReducer(taskInitialState, (builder) => {
         (section) => section.id === action.payload.sectionId
       )![action.payload.fieldName] = action.payload.newValue;
     })
+    .addCase(actionChangeSectionOrder, (state, action) => {
+      if (action.payload.arrivalPosition === action.payload.initialPosition) {
+        return;
+      }
+      const sectionToMove = state.sections.find(
+        (s) => s.id === action.payload.sectionId
+      );
+      if (!sectionToMove) return;
+
+      const currentPosition = sectionToMove.position;
+
+      if (action.payload.arrivalPosition > currentPosition) {
+        state.sections.forEach((section) => {
+          if (
+            section.position > currentPosition &&
+            section.position <= action.payload.arrivalPosition
+          ) {
+            section.position -= 1;
+          }
+        });
+      } else if (action.payload.arrivalPosition < currentPosition) {
+        state.sections.forEach((section) => {
+          if (
+            section.position < currentPosition &&
+            section.position >= action.payload.arrivalPosition
+          ) {
+            section.position += 1;
+          }
+        });
+      }
+      sectionToMove.position = action.payload.arrivalPosition;
+    })
     .addCase(getUserSections.fulfilled, (state, action) => {
       if (state.sections.length === 1) {
         state.sections.unshift(...action.payload);
       } else if (state.sections.length > 1) {
         state.sections = action.payload.push(state.sections.slice(-1));
+      }
+      for (let i = 0; i < state.sections.length; i++) {
+        state.sections[i].position = i;
       }
     })
     .addCase(getUserSections.pending, () => {})
@@ -193,6 +237,7 @@ const taskReducer = createReducer(taskInitialState, (builder) => {
           id: 0,
           title: "",
           tasks: [],
+          position: 0,
           lastUpdatedDate: "",
         },
       ];

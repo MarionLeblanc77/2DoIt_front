@@ -4,6 +4,7 @@ export interface ISection {
   id: number;
   title: string;
   tasks: ITask[];
+  position: number;
   lastUpdatedDate: string;
 }
 

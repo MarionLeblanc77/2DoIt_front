@@ -4,12 +4,16 @@ import "./Dashboard.scss";
 import Section from "../../components/Section/Section";
 import { ISection } from "../../@types/task";
 import getNbColumns from "../../utils/app";
-import { useAppSelector } from "../../store/hooks-redux";
+import { useAppDispatch, useAppSelector } from "../../store/hooks-redux";
+import { actionChangeSectionOrder } from "../../store/reducers/taskReducer";
 
 export default function Dashboard() {
+  const dispatch = useAppDispatch();
   const userSections = useAppSelector((state) => state.taskReducer.sections);
 
   const [nbColumns, setNbColumns] = useState<number>(getNbColumns);
+  const [dragData, setDragData] = useState({ id: 0, initialPosition: 0 });
+  const [currentHover, setCurrentHover] = useState<number | null>(null);
 
   useEffect(() => {
     function handleResize() {
@@ -21,18 +25,21 @@ export default function Dashboard() {
   }, []);
 
   const formatedTodoLists: ISection[][] = useMemo(() => {
+    const sortedUserSections = [...userSections].sort(
+      (a, b) => a.position - b.position
+    );
     if (nbColumns === 1) {
-      return [userSections];
+      return [sortedUserSections];
     }
     const result: ISection[][] = [];
 
     for (let i = 0; i < nbColumns; i++) {
       const subSection: ISection[] = [];
-      if (userSections[i]) {
-        subSection.push(userSections[i]);
+      if (sortedUserSections[i]) {
+        subSection.push(sortedUserSections[i]);
       }
       subSection.push(
-        ...userSections.filter(
+        ...sortedUserSections.filter(
           (_, index) => index > i && index % nbColumns === i
         )
       );
@@ -42,6 +49,38 @@ export default function Dashboard() {
     }
     return result;
   }, [nbColumns, userSections]);
+
+  const handleDragStart = (
+    e: React.DragEvent<HTMLElement>,
+    id: number,
+    initialPosition: number
+  ) => {
+    setDragData({ id, initialPosition });
+    setCurrentHover(initialPosition);
+  };
+
+  const handleDragOver = (e: React.DragEvent<HTMLElement>) => {
+    e.preventDefault();
+  };
+
+  const handleDragEnter = (
+    e: React.DragEvent<HTMLElement>,
+    arrivalPosition: number
+  ) => {
+    e.preventDefault();
+    e.stopPropagation();
+    if (currentHover !== arrivalPosition) {
+      setCurrentHover(arrivalPosition);
+      dispatch(
+        actionChangeSectionOrder({
+          sectionId: dragData.id,
+          arrivalPosition,
+          initialPosition: dragData.initialPosition,
+        })
+      );
+      setDragData((prev) => ({ ...prev, initialPosition: arrivalPosition }));
+    }
+  };
 
   return (
     <div className="dashboard">
@@ -55,13 +94,33 @@ export default function Dashboard() {
           {subSection.map((section) => {
             if (!section) return null;
             return (
-              <div key={section.id} className="dashboard-section">
-                <Section
-                  id={section.id}
-                  title={section.title}
-                  tasks={section.tasks}
-                  lastUpdatedDate={section.lastUpdatedDate}
-                />
+              <div
+                key={section.id}
+                onDragOver={section.id !== 0 ? handleDragOver : undefined}
+                onDragEnter={
+                  section.id !== 0
+                    ? (e) => handleDragEnter(e, section.position)
+                    : undefined
+                }
+              >
+                <div
+                  className="dashboard-section"
+                  draggable={section.id !== 0}
+                  onDragStart={(e) =>
+                    handleDragStart(e, section.id, section.position)
+                  }
+                  onDragEnd={() => {
+                    setCurrentHover(null);
+                    setDragData({ id: 0, initialPosition: 0 });
+                  }}
+                >
+                  <Section
+                    id={section.id}
+                    title={section.title}
+                    tasks={section.tasks}
+                    lastUpdatedDate={section.lastUpdatedDate}
+                  />
+                </div>
               </div>
             );
           })}

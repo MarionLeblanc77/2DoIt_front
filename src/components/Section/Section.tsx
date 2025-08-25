@@ -11,12 +11,14 @@ import deleteSection from "../../store/middlewares/deleteSection";
 import addSection from "../../store/middlewares/addSection";
 import Task from "../Task/Task";
 
+interface SectionProps extends Omit<ISection, "position"> {}
+
 export default function Section({
   id,
   title,
   tasks,
   lastUpdatedDate,
-}: ISection) {
+}: SectionProps) {
   const dispatch = useAppDispatch();
 
   const [newTaskContent, setNewTaskContent] = useState<string>("");
