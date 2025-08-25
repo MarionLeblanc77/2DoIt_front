@@ -45,10 +45,14 @@ const userReducer = createReducer(userInitialState, (builder) => {
     })
     .addCase(register.rejected, (state, action) => {
       console.log("Register error:", action.payload);
-      if (typeof action.payload === "string") {
-        state.messages.push(action.payload);
+      if (action.payload) {
+        if (typeof action.payload === "string") {
+          state.messages.push(action.payload);
+        } else {
+          state.messages.push(...(action.payload as string[]));
+        }
       } else {
-        state.messages.push(...(action.payload as string[]));
+        state.messages.push("Sorry, something went wrong.");
       }
     })
     .addCase(login.fulfilled, (state, action) => {
@@ -63,7 +67,11 @@ const userReducer = createReducer(userInitialState, (builder) => {
       state.messages = [];
     })
     .addCase(login.rejected, (state, action) => {
-      state.messages.push(action.payload as string);
+      if (action.payload) {
+        state.messages.push(action.payload as string);
+      } else {
+        state.messages.push("Sorry, something went wrong.");
+      }
     })
     .addCase(getUserContacts.fulfilled, (state, action) => {
       state.connectedUser.contacts = action.payload;
