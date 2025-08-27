@@ -6,13 +6,18 @@ import { ISection } from "../../@types/task";
 import getNbColumns from "../../utils/app";
 import { useAppDispatch, useAppSelector } from "../../store/hooks-redux";
 import { actionChangeSectionOrder } from "../../store/reducers/taskReducer";
+import updateSectionsPositions from "../../store/middlewares/updateSectionsPositions";
 
 export default function Dashboard() {
   const dispatch = useAppDispatch();
   const userSections = useAppSelector((state) => state.taskReducer.sections);
 
   const [nbColumns, setNbColumns] = useState<number>(getNbColumns);
-  const [dragData, setDragData] = useState({ id: 0, initialPosition: 0 });
+  const [dragData, setDragData] = useState({
+    id: 0,
+    fixedInitialPosition: 0,
+    moveInitialPosition: 0,
+  });
   const [currentHover, setCurrentHover] = useState<number | null>(null);
 
   useEffect(() => {
@@ -55,7 +60,11 @@ export default function Dashboard() {
     id: number,
     initialPosition: number
   ) => {
-    setDragData({ id, initialPosition });
+    setDragData({
+      id,
+      fixedInitialPosition: initialPosition,
+      moveInitialPosition: initialPosition,
+    });
     setCurrentHover(initialPosition);
   };
 
@@ -75,11 +84,40 @@ export default function Dashboard() {
         actionChangeSectionOrder({
           sectionId: dragData.id,
           arrivalPosition,
-          initialPosition: dragData.initialPosition,
+          initialPosition: dragData.moveInitialPosition,
         })
       );
-      setDragData((prev) => ({ ...prev, initialPosition: arrivalPosition }));
+      setDragData((prev) => ({
+        ...prev,
+        moveInitialPosition: arrivalPosition,
+      }));
     }
+  };
+
+  const handleDragDrop = () => {
+    if (dragData.fixedInitialPosition !== currentHover) {
+      const newPositions = userSections
+        .map((section) => ({
+          id: section.id,
+          position: section.position,
+        }))
+        .filter(
+          (section) =>
+            section.id !== 0 &&
+            (dragData.fixedInitialPosition < currentHover!
+              ? section.position >= dragData.fixedInitialPosition &&
+                section.position <= currentHover!
+              : section.position <= dragData.fixedInitialPosition &&
+                section.position >= currentHover!)
+        );
+      dispatch(updateSectionsPositions({ newPositions }));
+    }
+    setCurrentHover(null);
+    setDragData({
+      id: 0,
+      fixedInitialPosition: 0,
+      moveInitialPosition: 0,
+    });
   };
 
   return (
@@ -109,14 +147,12 @@ export default function Dashboard() {
                   onDragStart={(e) =>
                     handleDragStart(e, section.id, section.position)
                   }
-                  onDragEnd={() => {
-                    setCurrentHover(null);
-                    setDragData({ id: 0, initialPosition: 0 });
-                  }}
+                  onDrop={handleDragDrop}
                 >
                   <Section
                     id={section.id}
                     title={section.title}
+                    position={section.position}
                     tasks={section.tasks}
                     lastUpdatedDate={section.lastUpdatedDate}
                   />

@@ -11,6 +11,7 @@ import addSection from "../middlewares/addSection";
 import deleteContactFromTask from "../middlewares/deleteContactFromTask";
 import addContactToTask from "../middlewares/addContactToTask";
 import toggleActive from "../middlewares/toggleActive";
+import updateSectionsPositions from "../middlewares/updateSectionsPositions";
 
 interface ITaskState {
   sections: ISection[];
@@ -96,14 +97,9 @@ const taskReducer = createReducer(taskInitialState, (builder) => {
       sectionToMove.position = action.payload.arrivalPosition;
     })
     .addCase(getUserSections.fulfilled, (state, action) => {
-      if (state.sections.length === 1) {
-        state.sections.unshift(...action.payload);
-      } else if (state.sections.length > 1) {
-        state.sections = action.payload.push(state.sections.slice(-1));
-      }
-      for (let i = 0; i < state.sections.length; i++) {
-        state.sections[i].position = i;
-      }
+      state.sections.push(...action.payload);
+      state.sections.find((section) => section.id === 0)!.position =
+        state.sections.length - 1;
     })
     .addCase(getUserSections.pending, () => {})
     .addCase(getUserSections.rejected, () => {})
@@ -150,6 +146,11 @@ const taskReducer = createReducer(taskInitialState, (builder) => {
     })
     .addCase(updateSection.pending, () => {})
     .addCase(updateSection.rejected, () => {})
+    .addCase(updateSectionsPositions.fulfilled, (state, action) => {
+      state.sections = action.payload.push(state.sections.slice(0, 1));
+    })
+    .addCase(updateSectionsPositions.pending, () => {})
+    .addCase(updateSectionsPositions.rejected, () => {})
     .addCase(addTask.fulfilled, (state, action) => {
       const toUpdateSectionId = action.payload.sectionId ?? 0;
 
@@ -168,11 +169,11 @@ const taskReducer = createReducer(taskInitialState, (builder) => {
       state.sections = state.sections.map((section) => {
         if (section.id === 0) {
           section.title = "";
+          section.position = state.sections.length - 1;
           return section;
         }
         return section;
       });
-      state.sections.push(state.sections.splice(-2, 1)[0]);
     })
     .addCase(addSection.pending, () => {})
     .addCase(addSection.rejected, () => {})

@@ -3,19 +3,18 @@ import { createAsyncThunk } from "@reduxjs/toolkit";
 import { axiosInstance } from "../../utils/axios";
 
 interface Props {
-  title: string;
-  position: number;
+  newPositions: { id: number; position: number }[];
 }
 
-const addSection = createAsyncThunk(
-  "task/ADD_SECTION",
+const updateSectionsPositions = createAsyncThunk(
+  "task/UPDATE_SECTIONS_POSITIONS",
   async (payload: Props, thunkAPI) => {
     try {
-      const result = await axiosInstance.post(`/section`, {
-        title: payload.title,
-        position: payload.position,
-      });
-      return { result: result.data };
+      const result = await axiosInstance.put(
+        `/sections/positions`,
+        payload.newPositions
+      );
+      return result.data;
     } catch (err: any) {
       const result: string | string[] = err.response.data.errors;
       return thunkAPI.rejectWithValue(result);
@@ -23,4 +22,5 @@ const addSection = createAsyncThunk(
   }
 );
 
-export default addSection;
+export default updateSectionsPositions;
+
