@@ -165,6 +165,7 @@ const taskReducer = createReducer(taskInitialState, (builder) => {
     .addCase(addTask.pending, () => {})
     .addCase(addTask.rejected, () => {})
     .addCase(addSection.fulfilled, (state, action) => {
+      console.log("addSection fulfilled");
       state.sections.push(action.payload.result.section);
       state.sections = state.sections.map((section) => {
         if (section.id === 0) {

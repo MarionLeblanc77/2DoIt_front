@@ -36,6 +36,13 @@ export default function Section({
   const handleSubmitTitle = () => () => {
     if (id === 0) {
       dispatch(addSection({ title, position }));
+      dispatch(
+        actionChangeSectionStateInfo({
+          sectionId: id,
+          fieldName: "title",
+          newValue: "",
+        })
+      );
     } else {
       dispatch(
         updateSection({
@@ -67,7 +74,7 @@ export default function Section({
           onBlur={handleSubmitTitle()}
           onKeyUp={(e) => {
             if (e.key === "Enter") {
-              handleSubmitTitle()();
+              handleSubmitTitle();
               e.currentTarget.blur();
             }
           }}
@@ -93,6 +100,7 @@ export default function Section({
             onBlur={handleAddTask()}
             onKeyUp={(e) => {
               if (e.key === "Enter") {
+                console.log("enter task");
                 handleAddTask();
                 e.currentTarget.blur();
               }
