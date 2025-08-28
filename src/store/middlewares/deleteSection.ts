@@ -11,7 +11,7 @@ const deleteSection = createAsyncThunk(
   async (payload: Props, thunkAPI) => {
     try {
       const result = await axiosInstance.delete(`/section/${payload.id}`);
-      return { data: result.data, id: payload.id };
+      return { data: result.data, deletedSectionId: payload.id };
     } catch (err: any) {
       const result: string | string[] = err.response.data.errors;
       return thunkAPI.rejectWithValue(result);
@@ -20,4 +20,3 @@ const deleteSection = createAsyncThunk(
 );
 
 export default deleteSection;
-

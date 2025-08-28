@@ -147,7 +147,16 @@ const taskReducer = createReducer(taskInitialState, (builder) => {
     .addCase(updateSection.pending, () => {})
     .addCase(updateSection.rejected, () => {})
     .addCase(updateSectionsPositions.fulfilled, (state, action) => {
-      state.sections = action.payload.push(state.sections.slice(0, 1));
+      state.sections.map((section) => {
+        const newSection = action.payload.sections.find(
+          (s: ISection) => s.id === section.id
+        );
+        if (newSection) {
+          section.position = newSection.position;
+          return section;
+        }
+        return section;
+      });
     })
     .addCase(updateSectionsPositions.pending, () => {})
     .addCase(updateSectionsPositions.rejected, () => {})
@@ -165,7 +174,6 @@ const taskReducer = createReducer(taskInitialState, (builder) => {
     .addCase(addTask.pending, () => {})
     .addCase(addTask.rejected, () => {})
     .addCase(addSection.fulfilled, (state, action) => {
-      console.log("addSection fulfilled");
       state.sections.push(action.payload.result.section);
       state.sections = state.sections.map((section) => {
         if (section.id === 0) {
@@ -179,11 +187,11 @@ const taskReducer = createReducer(taskInitialState, (builder) => {
     .addCase(addSection.pending, () => {})
     .addCase(addSection.rejected, () => {})
     .addCase(deleteTask.fulfilled, (state, action) => {
-      const sectionToUpdate = state.sections.find((section) =>
+      const sectionsToUpdate = state.sections.find((section) =>
         section.tasks.find((task) => task.id === action.payload.id)
       );
-      if (sectionToUpdate) {
-        sectionToUpdate!.tasks = sectionToUpdate!.tasks.filter(
+      if (sectionsToUpdate) {
+        sectionsToUpdate!.tasks = sectionsToUpdate!.tasks.filter(
           (task) => task.id !== action.payload.id
         );
       }
@@ -192,8 +200,23 @@ const taskReducer = createReducer(taskInitialState, (builder) => {
     .addCase(deleteTask.rejected, () => {})
     .addCase(deleteSection.fulfilled, (state, action) => {
       state.sections = state.sections.filter(
-        (section) => section.id !== action.payload.id
+        (section) => section.id !== action.payload.deletedSectionId
       );
+
+      state.sections.map((section) => {
+        const newSection = action.payload.data.sections.find(
+          (s: ISection) => s.id === section.id
+        );
+        if (newSection) {
+          section.position = newSection.position;
+          return section;
+        }
+        if (section.id === 0) {
+          section.position = state.sections.length - 1;
+          return section;
+        }
+        return section;
+      });
     })
     .addCase(deleteSection.pending, () => {})
     .addCase(deleteSection.rejected, () => {})
