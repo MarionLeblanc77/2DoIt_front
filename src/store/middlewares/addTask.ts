@@ -26,4 +26,3 @@ const addTask = createAsyncThunk(
 );
 
 export default addTask;
-
