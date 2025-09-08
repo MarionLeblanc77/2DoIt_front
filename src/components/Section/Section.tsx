@@ -1,4 +1,4 @@
-import { ChangeEvent, useState } from "react";
+import { ChangeEvent, useRef, useState } from "react";
 import { Square, Trash2 } from "react-feather";
 import DOMPurify from "dompurify";
 import "./Section.scss";
@@ -21,6 +21,7 @@ export default function Section({
   const dispatch = useAppDispatch();
 
   const [newTaskContent, setNewTaskContent] = useState<string>("");
+  const newTaskInput = useRef<HTMLInputElement>(null);
 
   const handleChangeSectionTitle =
     () => (event: ChangeEvent<HTMLInputElement>) => {
@@ -98,6 +99,7 @@ export default function Section({
           <Square size="1.2rem" />
           <input
             className="section-task-input input"
+            ref={newTaskInput}
             type="text"
             value={newTaskContent}
             onChange={(e) => setNewTaskContent(e.target.value)}
@@ -106,6 +108,7 @@ export default function Section({
               if (e.key === "Enter") {
                 handleAddTask();
                 e.currentTarget.blur();
+                newTaskInput.current!.focus();
               }
             }}
             placeholder="Add a new task..."
