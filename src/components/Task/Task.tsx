@@ -3,7 +3,7 @@ import { CheckSquare, Square, Trash2, Users } from "react-feather";
 import DOMPurify from "dompurify";
 import { ITask } from "../../@types/task";
 import UserIcon from "../UserIcon/UserIcon";
-import { useAppDispatch } from "../../store/hooks-redux";
+import { useAppDispatch, useAppSelector } from "../../store/hooks-redux";
 import { actionChangeTaskStateInfo } from "../../store/reducers/taskReducer";
 import updateTask from "../../store/middlewares/updateTask";
 import deleteTask from "../../store/middlewares/deleteTask";
@@ -17,6 +17,7 @@ interface TaskProps {
 
 export default function Task({ task, sectionId }: TaskProps) {
   const [isAddContactModalOpen, setIsAddContactModalOpen] = useState(false);
+  const userId = useAppSelector((state) => state.userReducer.connectedUser.id);
   const dispatch = useAppDispatch();
 
   const handleChangeTaskContent =
@@ -40,7 +41,7 @@ export default function Task({ task, sectionId }: TaskProps) {
     );
   };
 
-  const contacts = task.users?.slice(1);
+  const contacts = task.users?.filter((user) => user.id !== userId) || [];
 
   const userIconRef = useRef<HTMLElement>(null);
 

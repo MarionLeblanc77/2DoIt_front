@@ -1,4 +1,3 @@
-import "./Login.scss";
 import { useAppSelector } from "../../store/hooks-redux";
 import Field from "../Field/Field";
 
