@@ -70,6 +70,11 @@ export default function Dashboard() {
 
   const handleDragOver = (e: React.DragEvent<HTMLElement>) => {
     e.preventDefault();
+    if (e.clientY < 100) {
+      window.scrollBy(0, -5);
+    } else if (e.clientY > document.documentElement.clientHeight - 100) {
+      window.scrollBy(0, 5);
+    }
   };
 
   const handleDragEnter = (
