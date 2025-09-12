@@ -1,7 +1,6 @@
 import { ChangeEvent, useEffect, useRef, useState } from "react";
 import { Square, Trash2 } from "react-feather";
 import DOMPurify from "dompurify";
-import "./Section.scss";
 import type { ISection, ITask } from "../../@types/task";
 import { useAppDispatch } from "../../store/hooks-redux";
 import { actionChangeSectionStateInfo } from "../../store/reducers/taskReducer";
@@ -9,7 +8,9 @@ import addTask from "../../store/middlewares/addTask";
 import updateSection from "../../store/middlewares/updateSection";
 import deleteSection from "../../store/middlewares/deleteSection";
 import addSection from "../../store/middlewares/addSection";
+import { useModal } from "../../contexts/ModalContext";
 import Task from "../Task/Task";
+import "./Section.scss";
 
 interface SectionProps extends ISection {
   handleDragStartTask: (
@@ -43,6 +44,7 @@ export default function Section({
 
   const [newTaskContent, setNewTaskContent] = useState<string>("");
   const [orderedTasks, setOrderedTask] = useState<ITask[]>([]);
+  const { openModal } = useModal();
 
   const newTaskInput = useRef<HTMLInputElement>(null);
 
@@ -115,7 +117,12 @@ export default function Section({
         <Trash2
           className="delete-icon"
           size="1.2rem"
-          onClick={() => dispatch(deleteSection({ id }))}
+          onClick={() =>
+            openModal({
+              text: "Are you sure you want to delete this section and all its tasks?",
+              action: () => dispatch(deleteSection({ id })),
+            })
+          }
         />
       </h2>
       <ul className="section-tasks">

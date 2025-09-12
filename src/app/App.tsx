@@ -9,6 +9,7 @@ import Settings from "./Settings/Settings";
 import Header from "../components/Header/Header";
 import getUserSections from "../store/middlewares/getUserSections";
 import getUserContacts from "../store/middlewares/getUserContacts";
+import { ModalProvider } from "../contexts/ModalContext";
 import Error from "./Error/Error";
 
 function App() {
@@ -23,19 +24,21 @@ function App() {
   }, [logged]);
 
   return (
-    <div className="app">
-      {logged ? <Header /> : null}
-      <Routes>
-        {!logged && <Route path="/*" element={<Home />} />}
-        {logged && (
-          <>
-            <Route path="/" element={<Dashboard />} />
-            <Route path="/settings" element={<Settings />} />
-            <Route path="/*" element={<Error />} />
-          </>
-        )}
-      </Routes>
-    </div>
+    <ModalProvider>
+      <div className="app">
+        {logged ? <Header /> : null}
+        <Routes>
+          {!logged && <Route path="/*" element={<Home />} />}
+          {logged && (
+            <>
+              <Route path="/" element={<Dashboard />} />
+              <Route path="/settings" element={<Settings />} />
+              <Route path="/*" element={<Error />} />
+            </>
+          )}
+        </Routes>
+      </div>{" "}
+    </ModalProvider>
   );
 }
 
