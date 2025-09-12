@@ -25,7 +25,7 @@ interface SectionProps extends ISection {
     arrivalSection: number
   ) => void;
   handleDragOverTask: (e: React.DragEvent<HTMLElement>) => void;
-  handleDragDropTask: (type: "section" | "task") => void;
+  handleDragDropTask: () => void;
 }
 
 export default function Section({
@@ -135,7 +135,7 @@ export default function Section({
               onDragStart={(e) =>
                 handleDragStartTask(e, "task", task.id, task.position, id)
               }
-              onDrop={() => handleDragDropTask("task")}
+              onDrop={() => handleDragDropTask()}
             >
               <Task task={task} sectionId={id} />
             </div>

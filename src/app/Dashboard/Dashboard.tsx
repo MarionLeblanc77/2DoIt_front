@@ -17,36 +17,16 @@ export default function Dashboard() {
   const userSections = useAppSelector((state) => state.taskReducer.sections);
 
   const [nbColumns, setNbColumns] = useState<number>(getNbColumns);
-
-  // const [dragDataSection, setDragDataSection] = useState({
-  //   id: 0,
-  //   fixedInitialPosition: 0,
-  //   moveInitialPosition: 0,
-  // });
-  // const [currentHoveredSection, setCurrentHoveredSection] = useState<
-  //   number | null
-  // >(null);
-
-  // const [dragDataTask, setDragDataTask] = useState({
-  //   taskId: 0,
-  //   fixedInitialPosition: 0,
-  //   fixedInitialSection: 0,
-  //   moveInitialPosition: 0,
-  //   moveInitialSection: 0,
-  // });
-  // const [currentHoveredTask, setCurrentHoveredTask] = useState<{
-  //   sectionId: number;
-  //   position: number;
-  // } | null>(null);
-
   const [dragData, setDragData] = useState<{
     elementId: number;
+    type: "section" | "task" | undefined;
     fixedInitialPosition: number;
     fixedInitialSection?: number;
     moveInitialPosition: number;
     moveInitialSection?: number;
   }>({
     elementId: 0,
+    type: undefined,
     fixedInitialPosition: 0,
     fixedInitialSection: 0,
     moveInitialPosition: 0,
@@ -103,9 +83,9 @@ export default function Dashboard() {
     if (e.target !== e.currentTarget) {
       return;
     }
-    e.dataTransfer?.setData("dragType", type);
     setDragData({
       elementId,
+      type,
       fixedInitialPosition: initialPosition,
       fixedInitialSection: initialSection,
       moveInitialPosition: initialPosition,
@@ -124,7 +104,7 @@ export default function Dashboard() {
   ) => {
     e.preventDefault();
     e.stopPropagation();
-    if (e.dataTransfer?.getData("dragType") === "section") {
+    if (dragData.type === "section") {
       if (currentHover?.elementId !== arrivalPosition) {
         setCurrentHover((prev) => ({ ...prev, position: arrivalPosition }));
         dispatch(
@@ -136,8 +116,9 @@ export default function Dashboard() {
         );
       }
     } else if (
-      currentHover?.position !== arrivalPosition ||
-      currentHover?.elementId !== arrivalSection
+      dragData.type === "task" &&
+      (currentHover?.position !== arrivalPosition ||
+        currentHover?.elementId !== arrivalSection)
     ) {
       setCurrentHover({
         elementId: arrivalSection,
@@ -162,8 +143,8 @@ export default function Dashboard() {
     }));
   };
 
-  const handleDragDrop = (type: "section" | "task") => {
-    if (type === "section") {
+  const handleDragDrop = () => {
+    if (dragData.type === "section") {
       if (dragData.fixedInitialPosition !== currentHover?.position) {
         const currentHoveredPosition = currentHover?.position;
         if (currentHoveredPosition === undefined) return;
@@ -184,6 +165,7 @@ export default function Dashboard() {
         dispatch(updateSectionsPositions({ newPositions }));
       }
     } else if (
+      dragData.type === "task" &&
       currentHover &&
       currentHover.elementId &&
       dragData.fixedInitialSection &&
@@ -202,6 +184,7 @@ export default function Dashboard() {
     setCurrentHover(null);
     setDragData({
       elementId: 0,
+      type: undefined,
       fixedInitialPosition: 0,
       fixedInitialSection: 0,
       moveInitialPosition: 0,
@@ -246,7 +229,7 @@ export default function Dashboard() {
                   onDragStart={(e) =>
                     handleDragStart(e, "section", section.id, section.position)
                   }
-                  onDrop={() => handleDragDrop("section")}
+                  onDrop={() => handleDragDrop()}
                 >
                   <Section
                     id={section.id}
