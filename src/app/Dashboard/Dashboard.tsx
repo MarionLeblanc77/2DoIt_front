@@ -79,9 +79,14 @@ export default function Dashboard() {
     initialPosition: number,
     initialSection?: number
   ) => {
+    const target = e.target as HTMLElement;
+    const currentTarget = e.currentTarget as HTMLElement;
     e.stopPropagation();
-    if (e.target !== e.currentTarget) {
-      return;
+    if (target !== currentTarget) {
+      const draggableParent = target.closest('[draggable="true"]');
+      if (draggableParent && draggableParent !== currentTarget) {
+        return;
+      }
     }
     setDragData({
       elementId,
