@@ -9,6 +9,7 @@ import updateTask from "../../store/middlewares/updateTask";
 import deleteTask from "../../store/middlewares/deleteTask";
 import AddContactModal from "../AddContactModal/AddContactModal";
 import toggleActive from "../../store/middlewares/toggleActive";
+import { useModal } from "../../contexts/ModalContext";
 
 interface TaskProps {
   task: ITask;
@@ -17,6 +18,8 @@ interface TaskProps {
 
 export default function Task({ task, sectionId }: TaskProps) {
   const [isAddContactModalOpen, setIsAddContactModalOpen] = useState(false);
+  const { openModal } = useModal();
+
   const userId = useAppSelector((state) => state.userReducer.connectedUser.id);
   const dispatch = useAppDispatch();
 
@@ -115,7 +118,12 @@ export default function Task({ task, sectionId }: TaskProps) {
       <Trash2
         className="delete-icon"
         size="1.2rem"
-        onClick={() => dispatch(deleteTask({ id: task.id }))}
+        onClick={() =>
+          openModal({
+            text: "Are you sure you want to delete this task?",
+            action: () => dispatch(deleteTask({ id: task.id })),
+          })
+        }
       />
     </li>
   );
