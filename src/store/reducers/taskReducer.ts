@@ -12,6 +12,7 @@ import deleteContactFromTask from "../middlewares/deleteContactFromTask";
 import addContactToTask from "../middlewares/addContactToTask";
 import toggleActive from "../middlewares/toggleActive";
 import updateSectionsPositions from "../middlewares/updateSectionsPositions";
+import updateTasksPositions from "../middlewares/updateTasksPositions";
 
 interface ITaskState {
   sections: ISection[];
@@ -35,6 +36,14 @@ export const actionChangeTaskStateInfo = createAction<{
   newValue: string;
   fieldName: "content";
 }>("task/CHANGE_TASKINFO");
+
+export const actionChangeTaskOrder = createAction<{
+  taskId: number;
+  initialSection: number;
+  initialPosition: number;
+  arrivalPosition: number;
+  arrivalSection: number;
+}>("task/CHANGE_TASK_ORDER");
 
 export const actionChangeSectionStateInfo = createAction<{
   sectionId: number;
@@ -96,6 +105,71 @@ const taskReducer = createReducer(taskInitialState, (builder) => {
       }
       sectionToMove.position = action.payload.arrivalPosition;
     })
+    .addCase(actionChangeTaskOrder, (state, action) => {
+      if (
+        action.payload.arrivalPosition === action.payload.initialPosition &&
+        action.payload.arrivalSection === action.payload.initialSection
+      ) {
+        return;
+      }
+      const initialSection = state.sections.find(
+        (s) => s.id === action.payload.initialSection
+      );
+      if (!initialSection) return;
+
+      const taskToMove = initialSection?.tasks.find(
+        (t) => t.id === action.payload.taskId
+      );
+      if (!taskToMove) {
+        return;
+      }
+
+      const currentPosition = taskToMove.position;
+      // Move to same section
+      if (action.payload.arrivalSection === action.payload.initialSection) {
+        if (action.payload.arrivalPosition > currentPosition) {
+          initialSection.tasks.forEach((task) => {
+            if (
+              task.position > currentPosition &&
+              task.position <= action.payload.arrivalPosition
+            ) {
+              task.position -= 1;
+            }
+          });
+        } else if (action.payload.arrivalPosition < currentPosition) {
+          initialSection.tasks.forEach((task) => {
+            if (
+              task.position < currentPosition &&
+              task.position >= action.payload.arrivalPosition
+            ) {
+              task.position += 1;
+            }
+          });
+        }
+        taskToMove.position = action.payload.arrivalPosition;
+      } else {
+        // Move to different section
+        initialSection.tasks.forEach((task) => {
+          if (task.position > currentPosition) {
+            task.position -= 1;
+          }
+        });
+        initialSection.tasks = initialSection.tasks.filter(
+          (task) => task.id !== action.payload.taskId
+        );
+        const newSection = state.sections.find(
+          (s) => s.id === action.payload.arrivalSection
+        );
+        if (!newSection) return;
+        newSection.tasks.forEach((task) => {
+          if (task.position >= action.payload.arrivalPosition) {
+            task.position += 1;
+          }
+        });
+        taskToMove.position = action.payload.arrivalPosition;
+        newSection.tasks.push(taskToMove);
+      }
+    })
     .addCase(getUserSections.fulfilled, (state, action) => {
       state.sections.push(...action.payload);
       state.sections.find((section) => section.id === 0)!.position =
@@ -119,6 +193,9 @@ const taskReducer = createReducer(taskInitialState, (builder) => {
     })
     .addCase(updateTask.pending, () => {})
     .addCase(updateTask.rejected, () => {})
+    .addCase(updateTasksPositions.fulfilled, () => {})
+    .addCase(updateTasksPositions.pending, () => {})
+    .addCase(updateTasksPositions.rejected, () => {})
     .addCase(toggleActive.fulfilled, (state, action) => {
       state.sections = state.sections.map((section) => {
         if (section.id === action.payload.sectionId) {

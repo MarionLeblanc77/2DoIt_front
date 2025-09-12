@@ -5,20 +5,57 @@ import Section from "../../components/Section/Section";
 import { ISection } from "../../@types/task";
 import getNbColumns from "../../utils/app";
 import { useAppDispatch, useAppSelector } from "../../store/hooks-redux";
-import { actionChangeSectionOrder } from "../../store/reducers/taskReducer";
+import {
+  actionChangeSectionOrder,
+  actionChangeTaskOrder,
+} from "../../store/reducers/taskReducer";
 import updateSectionsPositions from "../../store/middlewares/updateSectionsPositions";
+import updateTasksPositions from "../../store/middlewares/updateTasksPositions";
 
 export default function Dashboard() {
   const dispatch = useAppDispatch();
   const userSections = useAppSelector((state) => state.taskReducer.sections);
 
   const [nbColumns, setNbColumns] = useState<number>(getNbColumns);
-  const [dragData, setDragData] = useState({
-    id: 0,
+
+  // const [dragDataSection, setDragDataSection] = useState({
+  //   id: 0,
+  //   fixedInitialPosition: 0,
+  //   moveInitialPosition: 0,
+  // });
+  // const [currentHoveredSection, setCurrentHoveredSection] = useState<
+  //   number | null
+  // >(null);
+
+  // const [dragDataTask, setDragDataTask] = useState({
+  //   taskId: 0,
+  //   fixedInitialPosition: 0,
+  //   fixedInitialSection: 0,
+  //   moveInitialPosition: 0,
+  //   moveInitialSection: 0,
+  // });
+  // const [currentHoveredTask, setCurrentHoveredTask] = useState<{
+  //   sectionId: number;
+  //   position: number;
+  // } | null>(null);
+
+  const [dragData, setDragData] = useState<{
+    elementId: number;
+    fixedInitialPosition: number;
+    fixedInitialSection?: number;
+    moveInitialPosition: number;
+    moveInitialSection?: number;
+  }>({
+    elementId: 0,
     fixedInitialPosition: 0,
+    fixedInitialSection: 0,
     moveInitialPosition: 0,
+    moveInitialSection: 0,
   });
-  const [currentHover, setCurrentHover] = useState<number | null>(null);
+  const [currentHover, setCurrentHover] = useState<{
+    elementId?: number;
+    position: number;
+  } | null>(null);
 
   useEffect(() => {
     function handleResize() {
@@ -57,15 +94,119 @@ export default function Dashboard() {
 
   const handleDragStart = (
     e: React.DragEvent<HTMLElement>,
-    id: number,
-    initialPosition: number
+    type: "section" | "task",
+    elementId: number,
+    initialPosition: number,
+    initialSection?: number
   ) => {
+    e.stopPropagation();
+    if (e.target !== e.currentTarget) {
+      return;
+    }
+    e.dataTransfer?.setData("dragType", type);
     setDragData({
-      id,
+      elementId,
       fixedInitialPosition: initialPosition,
+      fixedInitialSection: initialSection,
       moveInitialPosition: initialPosition,
+      moveInitialSection: initialSection,
     });
-    setCurrentHover(initialPosition);
+    setCurrentHover({
+      elementId: initialSection,
+      position: initialPosition,
+    });
+  };
+
+  const handleDragEnter = (
+    e: React.DragEvent<HTMLElement>,
+    arrivalPosition: number,
+    arrivalSection?: number
+  ) => {
+    e.preventDefault();
+    e.stopPropagation();
+    if (e.dataTransfer?.getData("dragType") === "section") {
+      if (currentHover?.elementId !== arrivalPosition) {
+        setCurrentHover((prev) => ({ ...prev, position: arrivalPosition }));
+        dispatch(
+          actionChangeSectionOrder({
+            sectionId: dragData.elementId,
+            arrivalPosition,
+            initialPosition: dragData.moveInitialPosition,
+          })
+        );
+      }
+    } else if (
+      currentHover?.position !== arrivalPosition ||
+      currentHover?.elementId !== arrivalSection
+    ) {
+      setCurrentHover({
+        elementId: arrivalSection,
+        position: arrivalPosition,
+      });
+      if (dragData.moveInitialSection && arrivalSection) {
+        dispatch(
+          actionChangeTaskOrder({
+            taskId: dragData.elementId,
+            initialSection: dragData.moveInitialSection,
+            initialPosition: dragData.moveInitialPosition,
+            arrivalSection,
+            arrivalPosition,
+          })
+        );
+      }
+    }
+    setDragData((prev) => ({
+      ...prev,
+      moveInitialPosition: arrivalPosition,
+      moveInitialSection: arrivalSection ?? prev.moveInitialSection,
+    }));
+  };
+
+  const handleDragDrop = (type: "section" | "task") => {
+    if (type === "section") {
+      if (dragData.fixedInitialPosition !== currentHover?.position) {
+        const currentHoveredPosition = currentHover?.position;
+        if (currentHoveredPosition === undefined) return;
+        const newPositions = userSections
+          .map((section) => ({
+            id: section.id,
+            position: section.position,
+          }))
+          .filter(
+            (section) =>
+              section.id !== 0 &&
+              (dragData.fixedInitialPosition < currentHoveredPosition
+                ? section.position >= dragData.fixedInitialPosition &&
+                  section.position <= currentHoveredPosition
+                : section.position <= dragData.fixedInitialPosition &&
+                  section.position >= currentHoveredPosition)
+          );
+        dispatch(updateSectionsPositions({ newPositions }));
+      }
+    } else if (
+      currentHover &&
+      currentHover.elementId &&
+      dragData.fixedInitialSection &&
+      (dragData.fixedInitialSection !== currentHover?.elementId ||
+        dragData.fixedInitialPosition !== currentHover?.position)
+    ) {
+      dispatch(
+        updateTasksPositions({
+          previousSectionId: dragData.fixedInitialSection,
+          previousPosition: dragData.fixedInitialPosition,
+          newSectionId: currentHover.elementId,
+          newPosition: currentHover.position,
+        })
+      );
+    }
+    setCurrentHover(null);
+    setDragData({
+      elementId: 0,
+      fixedInitialPosition: 0,
+      fixedInitialSection: 0,
+      moveInitialPosition: 0,
+      moveInitialSection: 0,
+    });
   };
 
   const handleDragOver = (e: React.DragEvent<HTMLElement>) => {
@@ -75,54 +216,6 @@ export default function Dashboard() {
     } else if (e.clientY > document.documentElement.clientHeight - 200) {
       window.scrollBy(0, 20);
     }
-  };
-
-  const handleDragEnter = (
-    e: React.DragEvent<HTMLElement>,
-    arrivalPosition: number
-  ) => {
-    e.preventDefault();
-    e.stopPropagation();
-    if (currentHover !== arrivalPosition) {
-      setCurrentHover(arrivalPosition);
-      dispatch(
-        actionChangeSectionOrder({
-          sectionId: dragData.id,
-          arrivalPosition,
-          initialPosition: dragData.moveInitialPosition,
-        })
-      );
-      setDragData((prev) => ({
-        ...prev,
-        moveInitialPosition: arrivalPosition,
-      }));
-    }
-  };
-
-  const handleDragDrop = () => {
-    if (dragData.fixedInitialPosition !== currentHover) {
-      const newPositions = userSections
-        .map((section) => ({
-          id: section.id,
-          position: section.position,
-        }))
-        .filter(
-          (section) =>
-            section.id !== 0 &&
-            (dragData.fixedInitialPosition < currentHover!
-              ? section.position >= dragData.fixedInitialPosition &&
-                section.position <= currentHover!
-              : section.position <= dragData.fixedInitialPosition &&
-                section.position >= currentHover!)
-        );
-      dispatch(updateSectionsPositions({ newPositions }));
-    }
-    setCurrentHover(null);
-    setDragData({
-      id: 0,
-      fixedInitialPosition: 0,
-      moveInitialPosition: 0,
-    });
   };
 
   return (
@@ -149,10 +242,11 @@ export default function Dashboard() {
                 <div
                   className="dashboard-section"
                   draggable={section.id !== 0}
+                  data-drag-type="section"
                   onDragStart={(e) =>
-                    handleDragStart(e, section.id, section.position)
+                    handleDragStart(e, "section", section.id, section.position)
                   }
-                  onDrop={handleDragDrop}
+                  onDrop={() => handleDragDrop("section")}
                 >
                   <Section
                     id={section.id}
@@ -160,6 +254,10 @@ export default function Dashboard() {
                     position={section.position}
                     tasks={section.tasks}
                     lastUpdatedDate={section.lastUpdatedDate}
+                    handleDragStartTask={handleDragStart}
+                    handleDragEnterTask={handleDragEnter}
+                    handleDragOverTask={handleDragOver}
+                    handleDragDropTask={handleDragDrop}
                   />
                 </div>
               </div>

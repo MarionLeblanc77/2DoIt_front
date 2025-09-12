@@ -13,4 +13,5 @@ export interface ITask {
   content: string;
   users: IUser[];
   active: boolean;
+  position: number;
 }

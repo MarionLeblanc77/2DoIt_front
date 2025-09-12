@@ -44,7 +44,6 @@ const userReducer = createReducer(userInitialState, (builder) => {
       state.messages = [];
     })
     .addCase(register.rejected, (state, action) => {
-      console.log("Register error:", action.payload);
       if (action.payload) {
         if (typeof action.payload === "string") {
           state.messages.push(action.payload);
