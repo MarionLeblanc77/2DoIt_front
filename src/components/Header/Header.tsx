@@ -2,8 +2,8 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { Home, Power, Settings } from "react-feather";
 import "./Header.scss";
 import { useAppDispatch, useAppSelector } from "../../store/hooks-redux";
-import { actionLogout } from "../../store/reducers/userReducer";
 import { actionResetTaskState } from "../../store/reducers/taskReducer";
+import logout from "../../store/middlewares/logout";
 
 export default function Header() {
   const navigate = useNavigate();
@@ -18,7 +18,7 @@ export default function Header() {
     navigate("/settings");
   };
   const handleClickLogout = () => {
-    dispatch(actionLogout());
+    dispatch(logout());
     dispatch(actionResetTaskState());
     navigate("/");
   };

@@ -3,9 +3,15 @@ import Field from "../Field/Field";
 
 interface LoginProps {
   changeField: (value: string, name: "email" | "password") => void;
+  isRememberMe: boolean;
+  setIsRememberMe: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-export default function Login({ changeField }: LoginProps) {
+export default function Login({
+  changeField,
+  isRememberMe,
+  setIsRememberMe,
+}: LoginProps) {
   const email = useAppSelector(
     (state) => state.userReducer.connectedUser.email
   );
@@ -37,6 +43,15 @@ export default function Login({ changeField }: LoginProps) {
         value={password}
         required
       />
+      <div className="remember-me">
+        <input
+          type="checkbox"
+          name="RememberMe"
+          checked={isRememberMe}
+          onChange={() => setIsRememberMe(!isRememberMe)}
+        />
+        <label htmlFor="RememberMe">Stay connected</label>
+      </div>
     </div>
   );
 }

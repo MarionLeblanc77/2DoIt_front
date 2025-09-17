@@ -1,24 +1,28 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import type { RootState } from "../types";
-import { axiosInstance, addTokenToAxiosInstance } from "../../utils/axios";
+import { axiosInstance } from "../../utils/axios";
 
 const login = createAsyncThunk(
   "user/LOGIN",
 
-  async (_, thunkAPI) => {
+  async (isRememberMe: boolean, thunkAPI) => {
     const state = thunkAPI.getState() as RootState;
     const { email, password } = state.userReducer.connectedUser;
     try {
-      const result = await axiosInstance.post("/login", {
-        email,
-        password,
-      });
-      addTokenToAxiosInstance(result.data.token);
-
-      await axiosInstance.post("/login_check", {
-        email,
-        password,
-      });
+      const result = await axiosInstance.post(
+        "/login_check",
+        {
+          email,
+          password,
+          rememberMe: isRememberMe,
+        },
+        {
+          headers: { "Content-Type": "application/json" },
+        }
+      );
+      if (isRememberMe) {
+        localStorage.setItem("rememberMe", isRememberMe.toString());
+      }
       return result.data.user;
     } catch (err: any) {
       const result: string | string[] = err.response.data.errors;

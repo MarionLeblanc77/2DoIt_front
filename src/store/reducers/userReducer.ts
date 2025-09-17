@@ -5,6 +5,8 @@ import register from "../middlewares/register";
 import getUserContacts from "../middlewares/getUserContacts";
 import addContact from "../middlewares/addContact";
 import deleteContact from "../middlewares/deleteContact";
+import checkUser from "../middlewares/checkUser";
+import logout from "../middlewares/logout";
 
 interface IUserState {
   logged: boolean;
@@ -72,6 +74,16 @@ const userReducer = createReducer(userInitialState, (builder) => {
         state.messages.push("Sorry, something went wrong.");
       }
     })
+    .addCase(checkUser.fulfilled, (state, action) => {
+      state.connectedUser.id = action.payload.id;
+      state.connectedUser.email = action.payload.email;
+      state.connectedUser.firstName = action.payload.firstName;
+      state.connectedUser.lastName = action.payload.lastName;
+      state.connectedUser.password = "";
+      state.logged = true;
+    })
+    .addCase(checkUser.pending, () => {})
+    .addCase(checkUser.rejected, () => {})
     .addCase(getUserContacts.fulfilled, (state, action) => {
       state.connectedUser.contacts = action.payload;
     })
@@ -89,13 +101,14 @@ const userReducer = createReducer(userInitialState, (builder) => {
     })
     .addCase(deleteContact.pending, () => {})
     .addCase(deleteContact.rejected, () => {})
-    .addCase(actionLogout, (state) => {
+    .addCase(logout.fulfilled, (state) => {
       state.logged = false;
       state.connectedUser.id = 0;
       state.connectedUser.email = "";
       state.connectedUser.password = "";
       state.connectedUser.firstName = "";
       state.connectedUser.lastName = "";
+      localStorage.removeItem("rememberMe");
     });
 });
 

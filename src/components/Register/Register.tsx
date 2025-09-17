@@ -6,9 +6,15 @@ interface RegisterProps {
     value: string,
     name: "firstName" | "lastName" | "email" | "password"
   ) => void;
+  isRememberMe: boolean;
+  setIsRememberMe: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-export default function Register({ changeField }: RegisterProps) {
+export default function Register({
+  changeField,
+  isRememberMe,
+  setIsRememberMe,
+}: RegisterProps) {
   const firstName = useAppSelector(
     (state) => state.userReducer.connectedUser.firstName
   );
@@ -63,6 +69,15 @@ export default function Register({ changeField }: RegisterProps) {
         value={password}
         required
       />
+      <div className="remember-me">
+        <input
+          type="checkbox"
+          name="RememberMe"
+          checked={isRememberMe}
+          onChange={() => setIsRememberMe(!isRememberMe)}
+        />
+        <label htmlFor="RememberMe">Stay connected</label>
+      </div>
     </div>
   );
 }

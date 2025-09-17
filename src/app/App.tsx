@@ -11,10 +11,18 @@ import getUserSections from "../store/middlewares/getUserSections";
 import getUserContacts from "../store/middlewares/getUserContacts";
 import { ModalProvider } from "../contexts/ModalContext";
 import Error from "./Error/Error";
+import checkUser from "../store/middlewares/checkUser";
 
 function App() {
   const dispatch = useAppDispatch();
   const logged = useAppSelector((state) => state.userReducer.logged);
+
+  useEffect(() => {
+    const rememberMe = localStorage.getItem("rememberMe");
+    if (rememberMe === "true") {
+      dispatch(checkUser());
+    }
+  }, []);
 
   useEffect(() => {
     if (logged) {

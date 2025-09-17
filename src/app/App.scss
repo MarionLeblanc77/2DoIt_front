@@ -2,6 +2,10 @@ body {
   font-family: sans-serif;
 }
 
+li {
+  list-style: none;
+}
+
 .app {
   box-sizing: border-box;
   background-color: #f0f2f5;
@@ -42,6 +46,16 @@ body {
   }
 }
 
+.remember-me {
+  margin-top: 0.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.3rem;
+  font-size: 0.9rem;
+  color: rgba(0, 0, 0, 0.74);
+}
+
 .editable-element:hover {
   background-color: rgba(0, 0, 0, 0.1);
   & .delete-icon,
@@ -56,8 +70,4 @@ body {
   display: none;
   margin-right: 0.3rem;
   cursor: pointer;
-}
-
-li {
-  list-style: none;
 }

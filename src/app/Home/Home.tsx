@@ -14,6 +14,7 @@ import register from "../../store/middlewares/register";
 function Home() {
   const dispatch = useAppDispatch();
   const messages = useAppSelector((state) => state.userReducer.messages);
+  const [isRememberMe, setIsRememberMe] = useState<boolean>(false);
 
   const changeUserField = (
     value: string,
@@ -27,17 +28,29 @@ function Home() {
     );
   };
 
-  const loginContent = <Login changeField={changeUserField} />;
-  const registerContent = <Register changeField={changeUserField} />;
+  const loginContent = (
+    <Login
+      changeField={changeUserField}
+      isRememberMe={isRememberMe}
+      setIsRememberMe={setIsRememberMe}
+    />
+  );
+  const registerContent = (
+    <Register
+      changeField={changeUserField}
+      isRememberMe={isRememberMe}
+      setIsRememberMe={setIsRememberMe}
+    />
+  );
 
   const handleSubmitLogin = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    dispatch(login());
+    dispatch(login(isRememberMe));
   };
 
   const handleSubmitRegister = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    dispatch(register());
+    dispatch(register(isRememberMe));
   };
 
   const tabs = [
@@ -49,6 +62,7 @@ function Home() {
         buttonLabel: "Connection",
       },
       action: handleSubmitLogin,
+      rememberMe: { setIsRememberMe, isRememberMe },
     },
     {
       id: 2,
@@ -58,6 +72,7 @@ function Home() {
         buttonLabel: "Register",
       },
       action: handleSubmitRegister,
+      rememberMe: { setIsRememberMe, isRememberMe },
     },
   ];
   const [activeTab, setActiveTab] = useState<number>(tabs[0].id);
