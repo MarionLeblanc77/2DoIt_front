@@ -1,5 +1,6 @@
 import { useAppSelector } from "../../store/hooks-redux";
 import Field from "../Field/Field";
+import "./Login.scss";
 
 interface LoginProps {
   changeField: (value: string, name: "email" | "password") => void;
@@ -23,6 +24,13 @@ export default function Login({
     changeField(value, name);
   };
 
+  const getBackendEndpoint = (): string => {
+    if (typeof window !== "undefined" && window.APP_CONFIG) {
+      return window.APP_CONFIG.BACKEND_ENDPOINT;
+    }
+    return "http://localhost:8000";
+  };
+
   return (
     <div className="login">
       <Field
@@ -43,6 +51,12 @@ export default function Login({
         value={password}
         required
       />
+      <a
+        className="password-recovery"
+        href={`${getBackendEndpoint()}/reset-password`}
+      >
+        Forgot your password ?
+      </a>
       <div className="remember-me">
         <input
           type="checkbox"
