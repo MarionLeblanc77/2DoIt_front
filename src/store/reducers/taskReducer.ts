@@ -25,7 +25,6 @@ export const taskInitialState: ITaskState = {
       title: "",
       tasks: [],
       position: 0,
-      lastUpdatedDate: "",
     },
   ],
 };
@@ -70,7 +69,7 @@ const taskReducer = createReducer(taskInitialState, (builder) => {
     })
     .addCase(actionChangeSectionStateInfo, (state, action) => {
       state.sections.find(
-        (section) => section.id === action.payload.sectionId
+        (section) => section.id === action.payload.sectionId,
       )![action.payload.fieldName] = action.payload.newValue;
     })
     .addCase(actionChangeSectionOrder, (state, action) => {
@@ -78,7 +77,7 @@ const taskReducer = createReducer(taskInitialState, (builder) => {
         return;
       }
       const sectionToMove = state.sections.find(
-        (s) => s.id === action.payload.sectionId
+        (s) => s.id === action.payload.sectionId,
       );
       if (!sectionToMove) return;
 
@@ -113,12 +112,12 @@ const taskReducer = createReducer(taskInitialState, (builder) => {
         return;
       }
       const initialSection = state.sections.find(
-        (s) => s.id === action.payload.initialSection
+        (s) => s.id === action.payload.initialSection,
       );
       if (!initialSection) return;
 
       const taskToMove = initialSection?.tasks.find(
-        (t) => t.id === action.payload.taskId
+        (t) => t.id === action.payload.taskId,
       );
       if (!taskToMove) {
         return;
@@ -155,10 +154,10 @@ const taskReducer = createReducer(taskInitialState, (builder) => {
           }
         });
         initialSection.tasks = initialSection.tasks.filter(
-          (task) => task.id !== action.payload.taskId
+          (task) => task.id !== action.payload.taskId,
         );
         const newSection = state.sections.find(
-          (s) => s.id === action.payload.arrivalSection
+          (s) => s.id === action.payload.arrivalSection,
         );
         if (!newSection) return;
         newSection.tasks.forEach((task) => {
@@ -226,7 +225,7 @@ const taskReducer = createReducer(taskInitialState, (builder) => {
     .addCase(updateSectionsPositions.fulfilled, (state, action) => {
       state.sections.map((section) => {
         const newSection = action.payload.sections.find(
-          (s: ISection) => s.id === section.id
+          (s: ISection) => s.id === section.id,
         );
         if (newSection) {
           section.position = newSection.position;
@@ -265,11 +264,11 @@ const taskReducer = createReducer(taskInitialState, (builder) => {
     .addCase(addSection.rejected, () => {})
     .addCase(deleteTask.fulfilled, (state, action) => {
       const sectionsToUpdate = state.sections.find((section) =>
-        section.tasks.find((task) => task.id === action.payload.id)
+        section.tasks.find((task) => task.id === action.payload.id),
       );
       if (sectionsToUpdate) {
         sectionsToUpdate!.tasks = sectionsToUpdate!.tasks.filter(
-          (task) => task.id !== action.payload.id
+          (task) => task.id !== action.payload.id,
         );
       }
     })
@@ -277,12 +276,12 @@ const taskReducer = createReducer(taskInitialState, (builder) => {
     .addCase(deleteTask.rejected, () => {})
     .addCase(deleteSection.fulfilled, (state, action) => {
       state.sections = state.sections.filter(
-        (section) => section.id !== action.payload.deletedSectionId
+        (section) => section.id !== action.payload.deletedSectionId,
       );
 
       state.sections.map((section) => {
         const newSection = action.payload.data.sections.find(
-          (s: ISection) => s.id === section.id
+          (s: ISection) => s.id === section.id,
         );
         if (newSection) {
           section.position = newSection.position;
@@ -299,12 +298,12 @@ const taskReducer = createReducer(taskInitialState, (builder) => {
     .addCase(deleteSection.rejected, () => {})
     .addCase(addContactToTask.fulfilled, (state, action) => {
       const sectionToUpdate = state.sections.find((section) =>
-        section.tasks.find((task) => task.id === action.payload.taskId)
+        section.tasks.find((task) => task.id === action.payload.taskId),
       );
 
       if (sectionToUpdate) {
         const taskToUpdate = sectionToUpdate.tasks.find(
-          (task) => task.id === action.payload.taskId
+          (task) => task.id === action.payload.taskId,
         );
 
         if (taskToUpdate) {
@@ -316,17 +315,17 @@ const taskReducer = createReducer(taskInitialState, (builder) => {
     .addCase(addContactToTask.rejected, () => {})
     .addCase(deleteContactFromTask.fulfilled, (state, action) => {
       const sectionToUpdate = state.sections.find((section) =>
-        section.tasks.find((task) => task.id === action.payload.ids.taskId)
+        section.tasks.find((task) => task.id === action.payload.ids.taskId),
       );
 
       if (sectionToUpdate) {
         const taskToUpdate = sectionToUpdate.tasks.find(
-          (task) => task.id === action.payload.ids.taskId
+          (task) => task.id === action.payload.ids.taskId,
         );
 
         if (taskToUpdate) {
           taskToUpdate.users = taskToUpdate.users.filter(
-            (user) => user.id !== action.payload.ids.userId
+            (user) => user.id !== action.payload.ids.userId,
           );
         }
       }
@@ -340,7 +339,6 @@ const taskReducer = createReducer(taskInitialState, (builder) => {
           title: "",
           tasks: [],
           position: 0,
-          lastUpdatedDate: "",
         },
       ];
     });

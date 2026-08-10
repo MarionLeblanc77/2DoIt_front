@@ -5,7 +5,6 @@ export interface ISection {
   title: string;
   tasks: ITask[];
   position: number;
-  lastUpdatedDate: string;
 }
 
 export interface ITask {

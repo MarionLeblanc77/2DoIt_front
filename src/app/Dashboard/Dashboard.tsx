@@ -48,7 +48,7 @@ export default function Dashboard() {
 
   const formatedTodoLists: ISection[][] = useMemo(() => {
     const sortedUserSections = [...userSections].sort(
-      (a, b) => a.position - b.position
+      (a, b) => a.position - b.position,
     );
     if (nbColumns === 1) {
       return [sortedUserSections];
@@ -62,8 +62,8 @@ export default function Dashboard() {
       }
       subSection.push(
         ...sortedUserSections.filter(
-          (_, index) => index > i && index % nbColumns === i
-        )
+          (_, index) => index > i && index % nbColumns === i,
+        ),
       );
       if (subSection.length > 0) {
         result.push(subSection);
@@ -77,7 +77,7 @@ export default function Dashboard() {
     type: "section" | "task",
     elementId: number,
     initialPosition: number,
-    initialSection?: number
+    initialSection?: number,
   ) => {
     const target = e.target as HTMLElement;
     const currentTarget = e.currentTarget as HTMLElement;
@@ -105,7 +105,7 @@ export default function Dashboard() {
   const handleDragEnter = (
     e: React.DragEvent<HTMLElement>,
     arrivalPosition: number,
-    arrivalSection?: number
+    arrivalSection?: number,
   ) => {
     e.preventDefault();
     e.stopPropagation();
@@ -117,7 +117,7 @@ export default function Dashboard() {
             sectionId: dragData.elementId,
             arrivalPosition,
             initialPosition: dragData.moveInitialPosition,
-          })
+          }),
         );
       }
     } else if (
@@ -137,7 +137,7 @@ export default function Dashboard() {
             initialPosition: dragData.moveInitialPosition,
             arrivalSection,
             arrivalPosition,
-          })
+          }),
         );
       }
     }
@@ -165,7 +165,7 @@ export default function Dashboard() {
                 ? section.position >= dragData.fixedInitialPosition &&
                   section.position <= currentHoveredPosition
                 : section.position <= dragData.fixedInitialPosition &&
-                  section.position >= currentHoveredPosition)
+                  section.position >= currentHoveredPosition),
           );
         dispatch(updateSectionsPositions({ newPositions }));
       }
@@ -183,7 +183,7 @@ export default function Dashboard() {
           previousPosition: dragData.fixedInitialPosition,
           newSectionId: currentHover.elementId,
           newPosition: currentHover.position,
-        })
+        }),
       );
     }
     setCurrentHover(null);
@@ -241,7 +241,6 @@ export default function Dashboard() {
                     title={section.title}
                     position={section.position}
                     tasks={section.tasks}
-                    lastUpdatedDate={section.lastUpdatedDate}
                     handleDragStartTask={handleDragStart}
                     handleDragEnterTask={handleDragEnter}
                     handleDragOverTask={handleDragOver}

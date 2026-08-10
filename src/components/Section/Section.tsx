@@ -18,12 +18,12 @@ interface SectionProps extends ISection {
     type: "section" | "task",
     taskId: number,
     initialPosition: number,
-    initialSection: number
+    initialSection: number,
   ) => void;
   handleDragEnterTask: (
     e: React.DragEvent<HTMLElement>,
     arrivalPosition: number,
-    arrivalSection: number
+    arrivalSection: number,
   ) => void;
   handleDragOverTask: (e: React.DragEvent<HTMLElement>) => void;
   handleDragDropTask: () => void;
@@ -34,7 +34,6 @@ export default function Section({
   title,
   position,
   tasks,
-  lastUpdatedDate,
   handleDragStartTask,
   handleDragEnterTask,
   handleDragOverTask,
@@ -59,7 +58,7 @@ export default function Section({
           sectionId: id,
           fieldName: "title",
           newValue: DOMPurify.sanitize(event.target.value),
-        })
+        }),
       );
     };
 
@@ -73,14 +72,14 @@ export default function Section({
           sectionId: id,
           fieldName: "title",
           newValue: "",
-        })
+        }),
       );
     } else {
       dispatch(
         updateSection({
           id,
           title,
-        })
+        }),
       );
     }
   };
@@ -91,7 +90,7 @@ export default function Section({
         addTask({
           sectionId: id,
           content: newTaskContent,
-        })
+        }),
       );
     }
     setNewTaskContent("");
@@ -168,11 +167,6 @@ export default function Section({
           />
         </li>
       </ul>
-      {id !== 0 && (
-        <small className="section-update">
-          Last updated on WIP not done {lastUpdatedDate}
-        </small>
-      )}
     </div>
   );
 }
