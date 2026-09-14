@@ -241,10 +241,10 @@ export default function Dashboard() {
                     title={section.title}
                     position={section.position}
                     tasks={section.tasks}
-                    handleDragStartTask={handleDragStart}
-                    handleDragEnterTask={handleDragEnter}
-                    handleDragOverTask={handleDragOver}
-                    handleDragDropTask={handleDragDrop}
+                    handleDragStart={handleDragStart}
+                    handleDragEnter={handleDragEnter}
+                    handleDragOver={handleDragOver}
+                    handleDragDrop={handleDragDrop}
                   />
                 </div>
               </div>
