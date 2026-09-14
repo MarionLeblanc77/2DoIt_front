@@ -31,7 +31,7 @@ export default function Task({ task, sectionId }: TaskProps) {
           taskId,
           fieldName: "content",
           newValue: DOMPurify.sanitize(event.target.value),
-        })
+        }),
       );
     };
 
@@ -40,7 +40,7 @@ export default function Task({ task, sectionId }: TaskProps) {
       updateTask({
         id: taskId,
         content: task.content,
-      })
+      }),
     );
   };
 

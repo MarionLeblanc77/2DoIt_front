@@ -56,18 +56,34 @@ li {
   color: rgba(0, 0, 0, 0.74);
 }
 
-.editable-element:hover {
-  background-color: rgba(0, 0, 0, 0.1);
-  & .delete-icon,
-  & .users-icon {
-    display: block;
-  }
-}
-
 .delete-icon,
 .users-icon {
   flex-shrink: 0;
   display: none;
   margin-right: 0.3rem;
-  cursor: pointer;
+  cursor: default;
+  pointer-events: none;
+}
+
+@media (any-hover: hover) {
+  .editable-element:hover {
+    background-color: rgba(0, 0, 0, 0.1);
+    & .delete-icon,
+    & .users-icon {
+      display: block;
+      pointer-events: auto;
+      cursor: pointer;
+    }
+  }
+}
+@media (hover: none) {
+  .editable-element:focus-within {
+    background-color: rgba(0, 0, 0, 0.1);
+    & .delete-icon,
+    & .users-icon {
+      display: block;
+      pointer-events: auto;
+      cursor: pointer;
+    }
+  }
 }
