@@ -13,20 +13,20 @@ import Task from "../Task/Task";
 import "./Section.scss";
 
 interface SectionProps extends ISection {
-  handleDragStartTask: (
+  handleDragStart: (
     e: React.DragEvent<HTMLElement>,
     type: "section" | "task",
     taskId: number,
     initialPosition: number,
     initialSection: number,
   ) => void;
-  handleDragEnterTask: (
+  handleDragEnter: (
     e: React.DragEvent<HTMLElement>,
     arrivalPosition: number,
     arrivalSection: number,
   ) => void;
-  handleDragOverTask: (e: React.DragEvent<HTMLElement>) => void;
-  handleDragDropTask: () => void;
+  handleDragOver: (e: React.DragEvent<HTMLElement>) => void;
+  handleDragDrop: () => void;
 }
 
 export default function Section({
@@ -34,10 +34,10 @@ export default function Section({
   title,
   position,
   tasks,
-  handleDragStartTask,
-  handleDragEnterTask,
-  handleDragOverTask,
-  handleDragDropTask,
+  handleDragStart,
+  handleDragEnter,
+  handleDragOver,
+  handleDragDrop,
 }: SectionProps) {
   const dispatch = useAppDispatch();
 
@@ -128,10 +128,10 @@ export default function Section({
         {orderedTasks.map((task) => (
           <div
             key={task.id}
-            onDragOver={task.id !== 0 ? handleDragOverTask : undefined}
+            onDragOver={task.id !== 0 ? handleDragOver : undefined}
             onDragEnter={
               task.id !== 0
-                ? (e) => handleDragEnterTask(e, task.position, id)
+                ? (e) => handleDragEnter(e, task.position, id)
                 : undefined
             }
           >
@@ -139,9 +139,9 @@ export default function Section({
               draggable={task.id !== 0}
               data-drag-type="task"
               onDragStart={(e) =>
-                handleDragStartTask(e, "task", task.id, task.position, id)
+                handleDragStart(e, "task", task.id, task.position, id)
               }
-              onDrop={() => handleDragDropTask()}
+              onDrop={() => handleDragDrop()}
             >
               <Task task={task} sectionId={id} />
             </div>
